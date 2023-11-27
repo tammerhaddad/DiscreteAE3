@@ -4,15 +4,19 @@ from cards import Card
 
 class Deck:
     def __init__(self):
-        self.cards = []
+        self.deck = []
         for suit in ['Hearts', 'Diamonds', 'Clubs', 'Spades']:
             for value in range(1, 14):
-                self.cards.append(Card(suit, value))
+                self.deck.append(Card(suit, value))
+        self.shuffle()
 
     def shuffle(self):
-        random.shuffle(self.cards)
+        random.shuffle(self.deck)
 
-    def draw(self, num_cards):
-        drawn_cards = self.cards[:num_cards]
-        self.cards = self.cards[num_cards:]
+    def draw(self, num = 1):
+        drawn_cards = self.deck[:num]
+        self.deck = self.deck[num:]
         return drawn_cards
+    
+    def __str__(self):
+        deck = [f"{card}\n" for card in self.deck]
