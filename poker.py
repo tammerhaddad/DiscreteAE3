@@ -2,39 +2,36 @@ from cards import Card
 from deck import Deck
 import itertools
 from math import comb
+class Poker:
+    def __init__(self, numPlayers=2):
+        self.deck = Deck()
+        self.players = []
+        self.numPlayers = numPlayers
+        for player in range(self.numPlayers): 
+            self.deck.shuffle()
+            self.players.append(self.deck.draw(2))
 
-deck = Deck()
-players = []
-numPlayers = 2
-#numPlayers = int(input("How many players? : "))
-for player in range(numPlayers): 
-    deck.shuffle()
-    players.append(deck.draw(2))
+    def printHands(self):
+        for i in range(len(self.players)):
+            print(f"\nPlayer {i+1}")
+            for card in self.players[i]:
+                print(card)
 
-def printHands():
-    for i in range(len(players)):
-        print(f"\nPlayer {i+1}")
-        for card in players[i]:
+    def printHand(self):
+        print("Your Hand: ")
+        for card in self.players[0]:
             print(card)
 
-def printHand():
-    print("Your Hand: ")
-    for card in players[0]:
-        print(card)
+    def dealTable(self, step):
+        if step == 0:
+            self.table.extend(self.deck.draw(3))
+        else:
+            self.table.extend(self.deck.draw())
+            
+        print("Table:\n")
+        for card in self.table:
+            print(card)
 
-table = []
-
-def dealTable(step):
-    if step == 0:
-        table.extend(deck.draw(3))
-    else:
-        table.extend(deck.draw())
-        
-    print("Table:\n")
-    for card in table:
-        print(card)
-
-printHand()
-for i in range(3):
-    input("\nEnter to Continue.")
-    dealTable(i)
+    def blindProb(self):
+        blindDeck = [card for player in self.players[1:] for card in player] + self.deck.deck
+        return len(blindDeck)
