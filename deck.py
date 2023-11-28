@@ -1,11 +1,10 @@
 import random
 from cards import Card
 
-
 class Deck:
     def __init__(self):
         self.deck = []
-        for suit in ['Hearts', 'Diamonds', 'Clubs', 'Spades']:
+        for suit in ['HEARTS', 'DIAMONDS', 'CLUBS', 'SPADES']:
             for value in range(1, 14):
                 self.deck.append(Card(suit, value))
         self.shuffle()

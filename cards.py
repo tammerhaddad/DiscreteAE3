@@ -1,7 +1,17 @@
+import pygame
+from enum import Enum
+
+class Suits(Enum):
+    CLUB = 0
+    SPADE = 1
+    HEART = 2
+    DIAMOND = 3
+
 class Card:
     def __init__(self, suit, value):
         self.suit = suit
         self.value = value
+        self.image = pygame.image.load('cards/' + self.suit + '-' + str(self.value) + '.svg')
     
     valToWord = {1: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}

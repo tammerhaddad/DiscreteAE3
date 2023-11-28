@@ -6,5 +6,5 @@ print(f"Prob: {game.blindProb()}")
 
 for i in range(3):
     input("\nEnter to Continue.")
-    game.dealTable(i)
+    game.renderGame(i)
     print(f"Prob: {game.blindProb()}")
