@@ -5,7 +5,7 @@ from math import comb
 from enum import Enum
 
 class Poker:
-    def __init__(self, numPlayers=2, omniscient = true):
+    def __init__(self, numPlayers=2, omniscient = True):
         pygame.init()
         pygame.display.set_caption("Poker")
         self.deck = Deck()
