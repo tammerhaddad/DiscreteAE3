@@ -4,7 +4,7 @@ from cards import Card
 class Deck:
     def __init__(self):
         self.deck = []
-        for suit in ['HEARTS', 'DIAMONDS', 'CLUBS', 'SPADES']:
+        for suit in ['HEART', 'DIAMOND', 'CLUB', 'SPADE']:
             for value in range(1, 14):
                 self.deck.append(Card(suit, value))
         self.shuffle()
