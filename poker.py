@@ -15,6 +15,10 @@ class Poker:
         self.omnicient = omniscient
         self.bounds = (1024, 768)
         self.window = pygame.display.set_mode(self.bounds)
+        background_colour = (255,255,255)
+        self.window.fill(background_colour)
+
+
         for player in range(self.numPlayers): 
             self.deck.shuffle()
             self.players.append(self.deck.draw(2))
