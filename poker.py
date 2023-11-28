@@ -62,14 +62,14 @@ class Poker:
         self.window.fill((30, 92, 58))
         font = pygame.font.SysFont('comicsans', 20, True)
         for i in range(len(self.table)):
-            self.window.blit(self.table[i].image, (120 * i, 50))
+            self.window.blit(self.table[i].image, (50+120 * i, 150))
 
         if (self.omnicient):
             for i in range(len(self.players)):
                 text = font.render(f"Player {i + 1}", True, (255,255,255))
-                self.window.blit(text, (i * 250 + 60, 250))
-                self.window.blit(self.players[i][0].image, (250 * i, 300))
-                self.window.blit(self.players[i][1].image, (250 * i + 110, 300))
+                self.window.blit(text, (i * 250 + 60, 650))
+                self.window.blit(self.players[i][0].image, (50+250 * i, 700))
+                self.window.blit(self.players[i][1].image, (50+250 * i + 110, 700))
         else:
             print()
         pygame.display.update()

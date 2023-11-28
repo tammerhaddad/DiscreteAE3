@@ -1,5 +1,5 @@
 from poker import Poker
-game = Poker()
+game = Poker(6)
 
 # RUN COMMAND
 # cd '' && '/usr/local/bin/python3'  'game.py'  && echo Exit status: $? && exit 1
