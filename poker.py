@@ -66,3 +66,5 @@ class Poker:
                 self.window.blit(self.players[i][0].image, (400, 200))
         else:
             print()
+
+        pygame.display.update()
