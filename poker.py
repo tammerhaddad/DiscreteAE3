@@ -67,4 +67,4 @@ class Poker:
         else:
             print()
 
-        pygame.display.update()
+        pygame.flip()
