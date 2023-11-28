@@ -18,17 +18,6 @@ class Poker:
             self.deck.shuffle()
             self.players.append(self.deck.draw(2))
 
-    def printHands(self):
-        for i in range(len(self.players)):
-            print(f"\nPlayer {i+1}")
-            for card in self.players[i]:
-                print(card)
-
-    def printHand(self):
-        print("Your Hand: ")
-        for card in self.players[0]:
-            print(card)
-
     def dealTable(self, step):
         if step == 0:
             self.table.extend(self.deck.draw(3))
@@ -41,12 +30,12 @@ class Poker:
         if screen_width / screen_height  > 2:
             width = screen_height * 2 
             height = screen_height
-            table = pygame.transform.scale(pygame.image.load('table.svg'), (width, height)) 
+            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
             self.window.blit(table, ((screen_width - width) / 2, 0))
         else:
             width = screen_width 
             height = screen_width / 2
-            table = pygame.transform.scale(pygame.image.load('table.svg'), (width, height)) 
+            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
             self.window.blit(table, (0, (screen_height - height) / 2))
         return width
 
@@ -77,16 +66,13 @@ class Poker:
         return True
 
     def renderGame(self):
-        # font = pygame.font.SysFont('comicsans', 20, True)
-        # for i in range(len(self.table)):
-        #     self.window.blit(self.table[i].image, (120 * i, 50))
+        for i in range(len(self.table)):
+            self.window.blit(self.table[i].image, (120 * i, 50))
 
-        # if (self.omnicient):
-        #     for i in range(len(self.players)):
-        #         text = font.render(f"Player {i + 1}", True, (255,255,255))
-        #         self.window.blit(text, (i * 250 + 60, 250))
-        #         self.window.blit(self.players[i][0].image, (250 * i, 300))
-        #         self.window.blit(self.players[i][1].image, (250 * i + 110, 300))
-        # else:
-        #     print()
+        if (self.omnicient):
+            for i in range(len(self.players)):
+                self.window.blit(self.players[i][0].image, (250 * i, 300))
+                self.window.blit(self.players[i][1].image, (250 * i + 110, 300))
+        else:
+            print()
         pygame.display.update()
