@@ -3,50 +3,59 @@ from deck import Deck
 import pygame
 from math import comb
 from enum import Enum
+
+# 6 player graphical max
 class Poker:
-    def __init__(self, numPlayers=2, omniscient = True):
+    def __init__(self, numPlayers=4 , omniscient = True):
         pygame.init()
         pygame.display.set_caption("Poker")
         self.players = []
         self.table = []
-        self.numPlayers = numPlayers
         self.omnicient = omniscient
-        self.bounds = (1600, 1000)
+        self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
-        self.deck = Deck(self.window)
-        background_colour = (30, 92, 58)
-        self.window.fill(background_colour)
-
-        for player in range(self.numPlayers): 
+        self.deck = Deck(self.renderBackground()[0])
+        for player in range(numPlayers): 
             self.deck.shuffle()
             self.players.append(self.deck.draw(2))
-
-    def printHands(self):
-        for i in range(len(self.players)):
-            print(f"\nPlayer {i+1}")
-            for card in self.players[i]:
-                print(card)
-
-    def printHand(self):
-        print("Your Hand: ")
-        for card in self.players[0]:
-            print(card)
 
     def dealTable(self, step):
         if step == 0:
             self.table.extend(self.deck.draw(3))
         else:
             self.table.extend(self.deck.draw())
-    
+
+    def renderBackground(self):
+        self.window.fill((40, 40, 43))
+        screen_width, screen_height = self.window.get_size()
+        if screen_width / screen_height  > 2:
+            width = screen_height * 2 
+            height = screen_height
+            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
+            offset = (screen_width - width) / 2
+            wide = True
+            self.window.blit(table, (offset, 0))
+        else:
+            width = screen_width 
+            height = screen_width / 2
+            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
+            offset = (screen_height - height) / 2
+            self.window.blit(table, (0, offset))
+            wide = False
+        return (width, height, offset, wide)
 
     def blindProb(self):
         blindDeck = [card for player in self.players[1:] for card in player] + self.deck.deck
         return len(blindDeck)
     
-    def quitGame(self):
-        pygame.quit()
-    
     def pause(self):
+        width = self.renderBackground()[0]
+        for cards in self.players:
+            for card in cards:
+                card.scale(width)
+        for card in self.table:
+            card.scale(width)
+        self.renderGame()
         pygame.time.wait(200)
 
     def gameUpdate(self):
@@ -58,18 +67,25 @@ class Poker:
                 return False
         return True
 
+   
     def renderGame(self):
-        self.window.fill((30, 92, 58))
-        font = pygame.font.SysFont('comicsans', 20, True)
-        for i in range(len(self.table)):
-            self.window.blit(self.table[i].image, (50+120 * i, 150))
+        cardSpacing = .0718
+        tableOrigin = (.32786, .465573)
+        playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
-        if (self.omnicient):
+        width, height, offset, wide = self.renderBackground()
+        if wide:
+            for i in range(len(self.table)):
+                self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
+            
             for i in range(len(self.players)):
-                text = font.render(f"Player {i + 1}", True, (255,255,255))
-                self.window.blit(text, (i * 250 + 60, 650))
-                self.window.blit(self.players[i][0].image, (50+250 * i, 700))
-                self.window.blit(self.players[i][1].image, (50+250 * i + 110, 700))
+                self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
+                self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
         else:
-            print()
+            for i in range(len(self.table)):
+                self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing , tableOrigin[1] * height + offset))
+
+            for i in range(len(self.players)):
+                self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
+                self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
         pygame.display.update()
