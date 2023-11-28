@@ -3,6 +3,7 @@ from deck import Deck
 import pygame
 from math import comb
 from enum import Enum
+import time
 
 class Poker:
     def __init__(self, numPlayers=2, omniscient = True):
@@ -64,11 +65,11 @@ class Poker:
 
         if (self.omnicient):
             for i in range(len(self.players)):
-                text = font.render("Player " + i, True, (255,255,255))
+                text = font.render(f"Player {i}", True, (255,255,255))
                 self.window.blit(text, (10 + i*10, 500))
                 self.window.blit(self.players[i][0].image, (400, 200))
                 self.window.blit(self.players[i][0].image, (400, 200))
         else:
             print()
 
-        pygame.flip()
+        pygame.display.flip()
