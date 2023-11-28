@@ -3,22 +3,19 @@ from deck import Deck
 import pygame
 from math import comb
 from enum import Enum
-import time
-
 class Poker:
     def __init__(self, numPlayers=2, omniscient = True):
         pygame.init()
         pygame.display.set_caption("Poker")
-        self.deck = Deck()
         self.players = []
         self.table = []
         self.numPlayers = numPlayers
         self.omnicient = omniscient
-        self.bounds = (1024, 768)
-        self.window = pygame.display.set_mode(self.bounds)
-        background_colour = (255,255,255)
+        self.bounds = (1600, 1000)
+        self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
+        self.deck = Deck(self.window)
+        background_colour = (30, 92, 58)
         self.window.fill(background_colour)
-
 
         for player in range(self.numPlayers): 
             self.deck.shuffle()
@@ -40,36 +37,39 @@ class Poker:
             self.table.extend(self.deck.draw(3))
         else:
             self.table.extend(self.deck.draw())
-        #print("Table:\n")
-        #for card in self.table:
-        #    print(card)
     
 
     def blindProb(self):
         blindDeck = [card for player in self.players[1:] for card in player] + self.deck.deck
         return len(blindDeck)
     
-    def renderGame(self):
-        key = None
+    def quitGame(self):
+        pygame.quit()
+    
+    def pause(self):
+        pygame.time.wait(200)
+
+    def gameUpdate(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                return
+                pygame.quit()
+                return False
             if event.type == pygame.KEYDOWN:
-                key = event.key
-        
-        self.window.fill((15,0,169))
-        font = pygame.font.SysFont('comicsans', 60, True)
+                return False
+        return True
 
+    def renderGame(self):
+        self.window.fill((30, 92, 58))
+        font = pygame.font.SysFont('comicsans', 20, True)
         for i in range(len(self.table)):
-            self.window.blit(self.table[i].image, (10 + i * 10, 200))
+            self.window.blit(self.table[i].image, (120 * i, 50))
 
         if (self.omnicient):
             for i in range(len(self.players)):
-                text = font.render(f"Player {i}", True, (255,255,255))
-                self.window.blit(text, (10 + i*10, 500))
-                self.window.blit(self.players[i][0].image, (400, 200))
-                self.window.blit(self.players[i][0].image, (400, 200))
+                text = font.render(f"Player {i + 1}", True, (255,255,255))
+                self.window.blit(text, (i * 250 + 60, 250))
+                self.window.blit(self.players[i][0].image, (250 * i, 300))
+                self.window.blit(self.players[i][1].image, (250 * i + 110, 300))
         else:
             print()
-
-        pygame.display.flip()
+        pygame.display.update()

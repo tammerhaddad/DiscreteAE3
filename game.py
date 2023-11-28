@@ -1,11 +1,12 @@
 from poker import Poker
 game = Poker()
 
-game.printHand()
-print(f"Prob: {game.blindProb()}")
+# RUN COMMAND
+# cd '' && '/usr/local/bin/python3'  'game.py'  && echo Exit status: $? && exit 1
 
-for i in range(3):
-    input("\nEnter to Continue.")
+for i in range(4):
     game.renderGame()
-    print(f"Prob: {game.blindProb()}")
-    
+    game.dealTable(i)
+    while game.gameUpdate():
+        game.pause()
+game.quitGame()
