@@ -18,8 +18,8 @@ class Card:
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
 
     def scale(self, table_width):
-        relative_width = table_width * 0.058
-        relative_height = relative_width * 1.4
+        relative_width = float(table_width) * 0.058
+        relative_height = float(relative_width) * 1.4
         self.image = pygame.transform.scale(pygame.image.load('cards/' + self.suit + '-' + str(self.value) + '.svg'), (relative_width, relative_height))
 
     def __str__(self):
