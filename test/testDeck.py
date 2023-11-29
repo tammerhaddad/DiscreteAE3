@@ -7,3 +7,8 @@ class Deck:
         for suit in Suit:
             for value in range(1, 13):
                 self.cards.append(Card(value, suit))
+
+    def draw(self, num):
+        drawn = self.cards[:num]
+        self.cards = self.cards[num:]
+        return drawn
