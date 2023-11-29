@@ -40,8 +40,8 @@ class Card:
     def compare(self, other):
         if self.value == other.value:
             return 2
-        return self.value > other.value
-    
+        return self.value > other.value 
+
     def __gt__(self, other):
         return self.value > other.value
 

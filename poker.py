@@ -75,7 +75,7 @@ class Poker:
         playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
         width, height, offset, wide = self.renderBackground()
-        blank = Card(1, 1, width, True)
+        blank = Card("HEART", -1, width, True)
         if wide:
             for i in range(len(self.table)):
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
