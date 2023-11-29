@@ -6,12 +6,12 @@ from enum import Enum
 
 # 6 player graphical max
 class Poker:
-    def __init__(self, numPlayers=4 , omniscient = True):
+    def __init__(self, numPlayers = 2 , blind = True):
         pygame.init()
         pygame.display.set_caption("Poker")
         self.players = []
         self.table = []
-        self.omnicient = omniscient
+        self.blind = blind
         self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
         self.deck = Deck(self.renderBackground()[0])
@@ -49,12 +49,12 @@ class Poker:
         return len(blindDeck)
     
     def pause(self):
-        width = self.renderBackground()[0]
+        dimensions = self.renderBackground()
         for cards in self.players:
             for card in cards:
-                card.scale(width)
+                card.scale(dimensions[0])
         for card in self.table:
-            card.scale(width)
+            card.scale(dimensions[0])
         self.renderGame()
         pygame.time.wait(200)
 
@@ -74,18 +74,29 @@ class Poker:
         playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
         width, height, offset, wide = self.renderBackground()
+        blank = Card(1, 1, width, True)
         if wide:
             for i in range(len(self.table)):
+                print(self.table[i].path)
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
             
             for i in range(len(self.players)):
-                self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
-                self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
+                if i != 0 and self.blind:
+                    self.window.blit(blank.image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
+                    self.window.blit(blank.image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
+                else:
+                    self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
+                    self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
         else:
             for i in range(len(self.table)):
+                print(self.table[i].path)
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing , tableOrigin[1] * height + offset))
 
             for i in range(len(self.players)):
-                self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
-                self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
+                if i != 0 and self.blind:
+                    self.window.blit(blank.image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
+                    self.window.blit(blank.image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
+                else:
+                    self.window.blit(self.players[i][0].image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
+                    self.window.blit(self.players[i][1].image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
         pygame.display.update()
