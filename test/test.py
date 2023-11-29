@@ -9,7 +9,7 @@ deck = Deck()
 numPlayers = 2
 hands = [deck.draw(2) for _ in range(numPlayers)]
 unknown = [card for card in deck.cards if card not in hands[0]]
-
+unknown.sort()
 possibleHands = list(itertools.combinations(unknown, 5))
 
 # makeThemHands = [Hand(hand) for hand in possibleHands]
