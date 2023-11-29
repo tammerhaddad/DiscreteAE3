@@ -19,7 +19,7 @@ class Hand():
     
     def straight(self):
         values = sorted([card.val for card in self.hand])
-        return values == list(range(min(values), max(values)+1))
+        return values == list(range(min(values), max(values)+1)) or values == [14, 2, 3, 4, 5]
     
     def of_a_kind(self, num):
         value_counts = Counter(card.val for card in self.hand)
@@ -35,12 +35,15 @@ class Hand():
     def rank(self):
         rank = 1
         if self.flush() and self.straight():
+            rank = 10
+        elif self.flush():
             rank = 9
         elif self.of_a_kind(4):
             rank = 8
         elif self.full_house():
             rank = 7
         elif self.flush():
+            print(self)
             rank = 6
         elif self.straight():
             rank = 5
@@ -52,4 +55,4 @@ class Hand():
             rank = 2
         else:
             rank = 1
-        return self.handRanking[rank]
+        return rank

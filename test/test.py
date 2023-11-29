@@ -7,13 +7,19 @@ start = time.time()
 
 deck = Deck()
 numPlayers = 2
-hands = [deck.draw(2) for _ in range(numPlayers)]
-unknown = [card for card in deck.cards if card not in hands[0]]
+players = [deck.draw(2) for _ in range(numPlayers)]
+table = deck.draw(5)
+comb = table + players[0]
+unknown = deck.cards + [card for sublist in players[1:] for card in sublist] + table
 unknown.sort()
-possibleHands = list(itertools.combinations(unknown, 5))
-
-# makeThemHands = [Hand(hand) for hand in possibleHands]
-# makeThemHands.sort()
-for a in unknown:
-    print(a)
-print(f"{len(unknown)}, Time: {time.time()-start:.2f}")
+possibleHands = itertools.combinations(unknown, 5)
+makeThemHands = [Hand(hand) for hand in possibleHands]
+makeThemHands.sort()
+length = len(makeThemHands)
+print(f"Time: {time.time()-start:.2f}")
+combs = [Hand(hand) for hand in itertools.combinations(comb, 5)]
+# for a in combs:
+#     print(a)
+best = max(combs)
+best_index = makeThemHands.index(best)
+print(f"Best Hand: {best}, {best.rank}\nProb = {best_index/len(makeThemHands)}\nTime: {time.time()-start:.2f}")
