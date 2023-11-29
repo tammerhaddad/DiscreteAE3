@@ -6,7 +6,6 @@ game = Poker(6)
 
 for i in range(4):
     game.renderGame()
-    game.dealTable(i)
     while game.gameUpdate():
         game.pause()
-game.quitGame()
+    game.dealTable(i)
