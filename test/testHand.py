@@ -6,10 +6,12 @@ class Hand():
         self.rank = self.rank()
 
     def __lt__(self, other):
+        if self.rank == other.rank:
+            print()
         return self.rank < other.rank
 
     def __eq__(self, other):
-        return self.rank == other.rank
+        return self.rank == other.rank and self.hand[0].value == other.hand[0].value
     
     def __str__(self):
         return ', '.join(map(str, self.hand))
