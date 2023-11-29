@@ -5,7 +5,7 @@ class Deck:
     def __init__(self):
         self.deck = []
         for suit in ['HEART', 'DIAMOND', 'CLUB', 'SPADE']:
-            for value in range(1, 14):
+            for value in range(2, 15):
                 self.deck.append(Card(suit, value))
         self.shuffle()
 

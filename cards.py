@@ -15,7 +15,7 @@ class Card:
         self.path = f'cards/{self.suit}-{self.value}.svg'
         self.image = pygame.image.load('cards/BACK.png') if self.back else pygame.image.load(self.path)
 
-    valToWord = {1: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
+    valToWord = {14: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
 
     def scale(self, table_width):

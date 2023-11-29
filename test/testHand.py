@@ -7,7 +7,10 @@ class Hand():
 
     def __lt__(self, other):
         if self.rank == other.rank:
-            print()
+            if self.rank in [9,7,5,6]:
+                self.sort_hand()
+                other.sort_hand()
+                self.hand[0]
         return self.rank < other.rank
 
     def __eq__(self, other):
@@ -20,15 +23,16 @@ class Hand():
         return all(card.suit == self.hand[0].suit for card in self.hand)
     
     def straight(self):
-        values = sorted([card.val for card in self.hand])
+        self.sort_hand_value()
+        values = [card.value for card in self.hand]
         return values == list(range(min(values), max(values)+1))
     
     def of_a_kind(self, num):
-        value_counts = Counter(card.val for card in self.hand)
+        value_counts = Counter(card.value for card in self.hand)
         return num in value_counts.values()
     
     def two_pair(self):
-        value_counts = Counter(card.val for card in self.hand)
+        value_counts = Counter(card.value for card in self.hand)
         return list(value_counts.values()).count(2) == 2
     
     def full_house(self):
@@ -55,3 +59,14 @@ class Hand():
         else:
             rank = 1
         return self.handRanking[rank]
+    
+    def sort_hand_value(self):
+        self.hand.sort(key=lambda card: (card.value == 1, card.value), reverse=True)
+
+    def sort_hand_suit(self):
+        self.hand.sort(key=lambda card: card.suit)
+    
+    def sort_hand(self):
+        self.sort_hand_value()
+        self.sort_hand_suit()
+
