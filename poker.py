@@ -7,7 +7,7 @@ from enum import Enum
 
 # 6 player graphical max
 class Poker:
-    def __init__(self, numPlayers = 2 , blind = True):
+    def __init__(self, numPlayers = 2 , blind = False):
         pygame.init()
         pygame.display.set_caption("Poker")
         self.players = []
@@ -15,7 +15,7 @@ class Poker:
         self.blind = blind
         self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
-        self.deck = Deck(self.renderBackground()[0])
+        self.deck = Deck()
         for player in range(numPlayers): 
             self.deck.shuffle()
             self.players.append(Player(player, self.deck.draw(2)))
@@ -75,7 +75,7 @@ class Poker:
         playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
         width, height, offset, wide = self.renderBackground()
-        blank = Card(1, 1, width, True)
+        blank = Card(1, 1, True)
         if wide:
             for i in range(len(self.table)):
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
