@@ -33,13 +33,8 @@ class Card:
         except:
             return str(self.value) + " of " + self.suit
     
-    def compare(self, other):
-        if self.value == other.value:
-            return 2
+    def __lt__(self, other):
         return self.value > other.value
     
-    def __gt__(self, other):
-        return self.value > other.value
-
-    def __ge__(self, other):
-        return self.value >= other.value
+    def __eq__(self, other):
+        return self.value == other.value

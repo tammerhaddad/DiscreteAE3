@@ -4,10 +4,11 @@ import random
 import time
 start = time.time()
 
-deck = range(50)
-allHands = itertools.combinations(deck, 5)
+deck = range(52)
+hand = random.sample(deck, 2)
+unknown = set(deck) - set(hand)
+allHands = list(itertools.combinations(unknown, 5))
 hands = [Hand(hand) for hand in allHands]
 hands.sort()
 
-
-print(f"Time: {time.time()-start:.2f}")
+print(f"{len(unknown)}, Time: {time.time()-start:.2f}")
