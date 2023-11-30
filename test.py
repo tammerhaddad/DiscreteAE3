@@ -1,14 +1,12 @@
 from hand import Hand
 from deck import Deck
-from card import Card
 import itertools
 import time
+import pickle
+
 start = time.time()
 fullTime = time.time()
 output = True
-
-def stringToHand(str):
-    return Hand([Card(int(a.split("-")[0]), a.split("-")[1]) for a in str.split(",")])
 
 def ptime(prefix):
     global start
@@ -17,24 +15,51 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-allHands = open('test/sorted.txt').read().splitlines()
+with open('sorted.pkl', 'rb') as file:
+    allHands = pickle.load(file)
 ptime("Read")
+setHands = set(allHands)
+ptime("toSet")
 length = len(allHands)
 numPlayers = 2
+blankDeck = Deck()
 
-def calc():
+#------------------------------------------------------------
+
+def play():
     deck = Deck()
     players = [deck.draw(2) for _ in range(numPlayers)]
-    table = deck.draw(5)
-    comb = table + players[0]
-    unknown = deck.cards + [card for player in players[1:] for card in player]
-    ptime("Initialize")
-    oppHands = [Hand(hand) for hand in itertools.combinations(unknown, 2)]
-    combs = [Hand(hand) for hand in itertools.combinations(comb, 5)]
-    ptime("Hand Possibilities")
-    best = max(combs)
-    print(f"Table: {list(map(str, table))}\nHand: {list(map(str, players[0]))}\nBest Hand: {best}, {best.strRank()}")
-    return allHands.index(str(best))
-# print(f"Total Time: {time.time()-fullTime} seconds.")
+    table = []
+    for i in range(4):
+        print(f"Prob: {prob(players, table)}")
+        # input("enter for next")
+        if i == 1:
+            table += deck.draw(3)
+        elif i > 1:
+            table += deck.draw()
+        ptime("Step")
+    print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
-print(f"Prob = {calc()/length}")
+
+def win(players, table):
+    bestHands = []
+    for player in players:
+        combs = itertools.combinations(player + table, 5)
+        bestHands.append(max(map(Hand, combs)))
+    return not bool(bestHands.index(max(bestHands)))
+
+def bestHand(hands):
+    return max(hands)
+#------------------------------------------------------------------
+
+def prob(players, table):
+    # p1Hands = set(hand for hand in setHands if any(card in hand.hand for card in players[0]+table))
+    unknown = set(blankDeck.cards) - set(players[0]) - set(table)
+    possibleTables = set(itertools.combinations(unknown, 5 - len(table)))
+    return max(possibleTables)
+
+#------------------------------------------------------------------
+
+ptime("Before")
+play()
+ptime("After")

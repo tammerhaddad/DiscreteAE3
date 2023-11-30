@@ -10,7 +10,7 @@ class Card:
         self.suit = suit
         self.back = back
         self.path = f'cards/{str(self.suit)[5:]}-{1 if self.val == 14 else self.val}.svg'
-        self.image = pygame.image.load('cards/BACK.png') if self.back else pygame.image.load(self.path)
+        self.image = None
 
     def __str__(self):
         return f"{self.val}-{self.suit.value}"
@@ -22,9 +22,9 @@ class Card:
     
     def __eq__(self, other):
         return self.val == other.val and self.suit == other.suit
-
-    def sameSuit(self, other):
-        return self.suit == other.suit
+    
+    def __hash__(self):
+        return hash((self.val, self.suit))
 
     def scale(self, table_width):
         relative_width = float(table_width) * 0.058

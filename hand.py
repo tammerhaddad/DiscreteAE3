@@ -65,6 +65,9 @@ class Hand():
             return True
         return self.rank == other.rank
     
+    def __hash__(self):
+        return hash(tuple(self.hand))
+    
     def full_house_lt(self, other):
         # Get the values of the three of a kind and the pair for both hands
         self_three_of_kind = [value for value, count in Counter(card.value for card in self.hand).items() if count == 3]
