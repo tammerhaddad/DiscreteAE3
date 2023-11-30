@@ -1,9 +1,7 @@
-from cards import Card
-from deck import Deck
+from testCard import Card
+from testDeck import Deck
 from player import Player
 import pygame
-from math import comb
-from enum import Enum
 
 # 6 player graphical max
 class Poker:
@@ -44,10 +42,6 @@ class Poker:
             self.window.blit(table, (0, offset))
             wide = False
         return (width, height, offset, wide)
-
-    def blindProb(self):
-        blindDeck = [card for player in self.players.hand for card in player.hand] + self.deck.deck
-        return len(blindDeck)
     
     def pause(self):
         dimensions = self.renderBackground()
@@ -65,9 +59,14 @@ class Poker:
                 pygame.quit()
                 return False
             if event.type == pygame.KEYDOWN:
+                if self.blind:
+                    self.players[0].blind_odds = self.blind_prob(0)
                 return False
         return True
    
+    def blind_prob(self, index):
+        return 0
+    
     def renderGame(self):
         cardSpacing = .0718
         tableOrigin = (.32786, .465573)
@@ -80,6 +79,11 @@ class Poker:
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
             
             for i in range(len(self.players)):
+                if i == 0:
+                    font = pygame.font.Font(None, 36)
+                    text = font.render(f"Probability: {self.players[i].blind_odds}", 1, (10, 10, 10))
+                    text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
+                    self.window.blit(text, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height - 0.05 * height))
                 if i != 0 and self.blind:
                     self.window.blit(blank.image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
                     self.window.blit(blank.image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
@@ -91,6 +95,11 @@ class Poker:
                 self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing , tableOrigin[1] * height + offset))
 
             for i in range(len(self.players)):
+                if i == 0:
+                    font = pygame.font.Font(None, 36)
+                    text = font.render(f"Probability: {self.players[i].blind_odds}", 1, (10, 10, 10))
+                    text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
+                    self.window.blit(text, (playerOrigins[i][0] * width, playerOrigins[i][1] * height - 0.05 * height + offset))
                 if i != 0 and self.blind:
                     self.window.blit(blank.image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
                     self.window.blit(blank.image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
