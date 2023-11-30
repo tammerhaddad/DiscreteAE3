@@ -67,7 +67,6 @@ class Poker:
             if event.type == pygame.KEYDOWN:
                 return False
         return True
-
    
     def renderGame(self):
         cardSpacing = .0718

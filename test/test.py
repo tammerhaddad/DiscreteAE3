@@ -1,4 +1,4 @@
-from testHand import Hand
+from test.testHand import Hand
 from testDeck import Deck
 from testCard import Card
 import itertools
