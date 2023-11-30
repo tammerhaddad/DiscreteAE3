@@ -4,6 +4,9 @@ class Hand():
     def __init__(self, hand):
         self.hand = sorted(hand)
         self.rank = self.rank()
+    
+    def __hash__(self):
+        return hash(tuple(self.hand))
 
     def strRank(self):
         return {
