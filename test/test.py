@@ -12,8 +12,6 @@ player2 = Hand([Card(3,"HEART"), Card(3,"SPADE"), Card(3,"CLUB"), Card(5,"HEART"
 print(type(player1.hand))
 print(player2.rank)
 
-
-
 print(player1 == player2)
 
 # makeThemHands = [Hand(hand) for hand in possibleHands]
