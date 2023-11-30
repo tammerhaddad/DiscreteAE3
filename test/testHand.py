@@ -95,7 +95,12 @@ class Hand():
     
     def straight(self):
         values = [card.value for card in self.hand]
-        return values == list(range(min(values), max(values)+1))
+        values.sort()
+        if max(values) == 14:
+            values.pop()
+        if values == list(range(min(values), max(values)+1)):
+            return True
+        return False
     
     def of_a_kind(self, num):
         value_counts = Counter(card.value for card in self.hand)

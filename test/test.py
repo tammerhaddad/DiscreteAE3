@@ -5,7 +5,7 @@ import itertools
 import random
 import time
 start = time.time()
-player1 = Hand([Card(10,"HEART"), Card(10,"SPADE"), Card(10,"CLUB"), Card(11,"HEART"), Card(11,"CLUB")])
+player1 = Hand([Card(2,"HEART"), Card(10,"SPADE"), Card(10,"CLUB"), Card(11,"HEART"), Card(11,"CLUB")])
 player2 = Hand([Card(12,"HEART"), Card(12,"SPADE"), Card(12,"CLUB"), Card(7,"HEART"), Card(8,"CLUB")])
 
 print(type(player1.hand))
