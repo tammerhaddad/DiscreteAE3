@@ -4,26 +4,125 @@ class Hand():
     def __init__(self, hand):
         self.hand = sorted(hand)
         self.rank = self.rank()
-    
+
     def strRank(self):
         return {
-            10: "Royal Flush",
-            9: "Straight Flush",
-            8: "Four of a Kind",
-            7: "Full House",
-            6: "Flush",
-            5: "Straight",
-            4: "Three of a Kind",
-            3: "Two Pair",
+            1: "High Card",
             2: "One Pair",
-            1: "High Card"
+            3: "Two Pair",
+            4: "Three of a Kind",
+            5: "Straight",
+            6: "Flush",
+            7: "Full House",
+            8: "Four of a Kind",
+            9: "Straight Flush",
+            10: "Royal Flush"
         }[self.rank]
-    
-    def __lt__(self, other):
-        return self.rank < other.rank
 
+    def __lt__(self, other):
+        if self.rank == other.rank:
+            if self.rank == 8:
+                return self.of_kind_lt(other, 4)
+            elif self.rank == 7:
+                return self.full_house_lt(other)
+            elif self.rank == 4:
+                return self.of_kind_lt(other, 3)
+            elif self.rank in [3,2]:
+                return self.of_kind_lt(other, 2)
+            for i in range(len(self.hand)):
+                if self.hand[i] != other.hand[i]:
+                    return self.hand[i] < other.hand[i]
+            return self.hand[0] < other.hand[0]
+        return self.rank < other.rank
+    
     def __eq__(self, other):
+        if self.rank == other.rank:
+            if self.rank == 8:
+                return self.of_kind_equal(other, 4)
+            elif self.rank == 7:
+                return self.full_house_equal(other)
+            elif self.rank == 4:
+                return self.of_kind_equal(other, 3)
+            elif self.rank in [3,2]:
+                return self.of_kind_equal(other, 2)
+            for i in range(len(self.hand)):
+                if self.hand[i] != other.hand[i]:
+                    return  False
+            return True
         return self.rank == other.rank
+    
+    
+    def full_house_lt(self, other):
+        self_three_of_a_kind = None
+        self_pair = None
+        other_three_of_a_kind = None
+        other_pair = None
+
+        for card in self.hand:
+            if self.hand.count(card) == 3:
+                self_three_of_a_kind = max(self_three_of_a_kind, card.value) if self_three_of_a_kind is not None else card.value
+            elif self.hand.count(card) == 2:
+                self_pair = max(self_pair, card.value) if self_pair is not None else card.value
+
+        for card in other.hand:
+            if other.hand.count(card) == 3:
+                other_three_of_a_kind = max(other_three_of_a_kind, card.value) if other_three_of_a_kind is not None else card.value
+            elif other.hand.count(card) == 2:
+                other_pair = max(other_pair, card.value) if other_pair is not None else card.value
+
+        if self_three_of_a_kind == other_three_of_a_kind:
+            return self_pair < other_pair
+        return self_three_of_a_kind
+
+    def full_house_equal(self, other):
+        self_three_of_a_kind = None
+        self_pair = None
+        other_three_of_a_kind = None
+        other_pair = None
+
+        for card in self.hand:
+            if self.hand.count(card) == 3:
+                self_three_of_a_kind = max(self_three_of_a_kind, card.value) if self_three_of_a_kind is not None else card.value
+            elif self.hand.count(card) == 2:
+                self_pair = max(self_pair, card.value) if self_pair is not None else card.value
+
+        for card in other.hand:
+            if other.hand.count(card) == 3:
+                other_three_of_a_kind = max(other_three_of_a_kind, card.value) if other_three_of_a_kind is not None else card.value
+            elif other.hand.count(card) == 2:
+                other_pair = max(other_pair, card.value) if other_pair is not None else card.value
+
+        return self_three_of_a_kind == other_three_of_a_kind and self_pair == other_pair
+    
+    def of_kind_lt(self, other, count):
+        self_counts = Counter(card.value for card in self.hand)
+        other_counts = Counter(card.value for card in other.hand)
+
+        self_of_kind = [value for value, count in self_counts.items() if count == count]
+        other_of_kind = [value for value, count in other_counts.items() if count == count]
+
+        self_extra = [value for value, count in self_counts.items() if count == 1]
+        other_extra = [value for value, count in other_counts.items() if count == 1]
+
+        for self_val, other_val in zip(self_of_kind, other_of_kind):
+            if self_val != other_val:
+                return self_val < other_val
+
+        for self_val, other_val in zip(self_extra, other_extra):
+            if self_val != other_val:
+                return self_val < other_val
+
+        return False
+        
+    def of_kind_equal(self, other, count):
+        self_counts = Counter(card.value for card in self.hand)
+        other_counts = Counter(card.value for card in other.hand)
+        
+        for value, self_count in self_counts.items():
+            if self_count != other_counts[value]:
+                return False
+        
+        return True
     
     def __str__(self):
         return ','.join(map(str, self.hand))
@@ -32,26 +131,24 @@ class Hand():
         return all(card.suit == self.hand[0].suit for card in self.hand)
     
     def straight(self):
-        values = [card.val for card in self.hand]
-        return values == list(range(min(values), max(values)+1)) or values == [14, 2, 3, 4, 5]
+        values = [card.value for card in self.hand]
+        return values == list(range(min(values), max(values)+1))
     
     def of_a_kind(self, num):
-        value_counts = Counter(card.val for card in self.hand)
+        value_counts = Counter(card.value for card in self.hand)
         return num in value_counts.values()
     
     def two_pair(self):
-        value_counts = Counter(card.val for card in self.hand)
+        value_counts = Counter(card.value for card in self.hand)
         return list(value_counts.values()).count(2) == 2
     
     def full_house(self):
-        return self.of_a_kind(3) and self.two_pair()
+        return self.of_a_kind(3) and self.of_a_kind(2)
     
     def rank(self):
         rank = 1
         if self.flush() and self.straight():
             rank = 9
-            if(min(self.hand).val == 10):
-                rank = 10
         elif self.of_a_kind(4):
             rank = 8
         elif self.full_house():
@@ -69,3 +166,4 @@ class Hand():
         else:
             rank = 1
         return rank
+    
