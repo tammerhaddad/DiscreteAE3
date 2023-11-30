@@ -2,7 +2,7 @@ from collections import Counter
 
 class Hand():
     def __init__(self, hand):
-        self.hand = hand
+        self.hand = sorted(hand)
         self.rank = self.rank()
 
     def __lt__(self, other):
@@ -57,7 +57,7 @@ class Hand():
         for i in range(len(self_of_kind)):
             if self_of_kind[i] != other_of_kind[i]:
                 return self_of_kind[i] < other_of_kind[i]
-        for i in len(self_extra):
+        for i in range(len(self_extra)):
             if self_extra[i] != other_extra[i]:
                 return  self_extra[i] < other_extra[i]
         return False
@@ -153,4 +153,3 @@ class Hand():
     def sort_hand(self):
         self.sort_hand_value()
         self.sort_hand_suit()
-
