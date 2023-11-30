@@ -1,7 +1,7 @@
-import time
 from testDeck import Deck
 from testHand import Hand
 import itertools
+import time
 start = time.time()
 def write(path, hands):
     with open(f"{path}", 'w') as file:
@@ -18,5 +18,5 @@ mixes = itertools.combinations(deck.cards, 5)
 ptime("Calculate")
 hands = [Hand(hand) for hand in mixes]
 ptime("Convert")
-write("/Users/seanma/Documents/code/csfundies/DiscreteAE2/test/sorted.txt", sorted(hands))
+write("sorted.txt", sorted(hands))
 ptime("Write and Finish")
