@@ -2,9 +2,23 @@ from collections import Counter
 
 class Hand():
     def __init__(self, hand):
-        self.hand = hand
+        self.hand = sorted(hand)
         self.rank = self.rank()
-
+    
+    def strRank(self):
+        return {
+            10: "Royal Flush",
+            9: "Straight Flush",
+            8: "Four of a Kind",
+            7: "Full House",
+            6: "Flush",
+            5: "Straight",
+            4: "Three of a Kind",
+            3: "Two Pair",
+            2: "One Pair",
+            1: "High Card"
+        }[self.rank]
+    
     def __lt__(self, other):
         return self.rank < other.rank
 
@@ -12,14 +26,14 @@ class Hand():
         return self.rank == other.rank
     
     def __str__(self):
-        return ', '.join(map(str, self.hand))
+        return ','.join(map(str, self.hand))
 
     def flush(self):
         return all(card.suit == self.hand[0].suit for card in self.hand)
     
     def straight(self):
-        values = sorted([card.val for card in self.hand])
-        return values == list(range(min(values), max(values)+1))
+        values = [card.val for card in self.hand]
+        return values == list(range(min(values), max(values)+1)) or values == [14, 2, 3, 4, 5]
     
     def of_a_kind(self, num):
         value_counts = Counter(card.val for card in self.hand)
@@ -36,6 +50,8 @@ class Hand():
         rank = 1
         if self.flush() and self.straight():
             rank = 9
+            if(min(self.hand).val == 10):
+                rank = 10
         elif self.of_a_kind(4):
             rank = 8
         elif self.full_house():
@@ -52,4 +68,4 @@ class Hand():
             rank = 2
         else:
             rank = 1
-        return self.handRanking[rank]
+        return rank
