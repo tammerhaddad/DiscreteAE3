@@ -6,26 +6,26 @@ class Card:
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
 
     def __init__(self, val, suit, back = False):
-        self.val = val 
+        self.value = val 
         self.suit = suit
         self.back = back
-        self.path = f'cards/{str(self.suit)[5:]}-{1 if self.val == 14 else self.val}.svg'
-        # self.image = None
-        self.image = pygame.image.load('cards/BACK.png') if self.back else pygame.image.load(self.path)
+        self.path = f'cards/{str(self.suit)[5:]}-{1 if self.value == 14 else self.value}.svg'
+        self.image = None
+        # self.image = pygame.image.load('cards/BACK.png') if self.back else pygame.image.load(self.path)
 
     def __str__(self):
-        return f"{self.val}-{self.suit.value}"
+        return f"{self.value}-{self.suit.value}"
         
     def __lt__(self, other):
-        if(self.val == other.val):
+        if(self.value == other.val):
             return self.suit.value < other.suit.value
-        return self.val < other.val
+        return self.value < other.val
     
     def __eq__(self, other):
-        return self.val == other.val and self.suit == other.suit
+        return self.value == other.val and self.suit == other.suit
     
     def __hash__(self):
-        return hash((self.val, self.suit, self.back))
+        return hash((self.value, self.suit, self.back))
 
     def scale(self, table_width):
         relative_width = float(table_width) * 0.058
