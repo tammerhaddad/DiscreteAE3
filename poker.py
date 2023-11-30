@@ -1,5 +1,5 @@
-from testCard import Card
-from testDeck import Deck
+from card import Card
+from deck import Deck
 from player import Player
 import pygame
 
