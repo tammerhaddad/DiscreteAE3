@@ -1,19 +1,15 @@
 from testHand import Hand
 from testDeck import Deck
+from testCard import Card
 import itertools
 import random
 import time
 start = time.time()
 
-deck = Deck()
-numPlayers = 2
-hands = [deck.draw(2) for _ in range(numPlayers)]
-table = deck.draw(5)
-player1hand = hands[0] + table
-unknown = [card for card in deck.cards if card not in player1hand]
+player1 = Hand([Card(3,"HEART"), Card(3,"SPADE"), Card(3,"CLUB"), Card(5,"HEART"), Card(5,"CLUB")])
+player2 = Hand([Card(4,"HEART"), Card(4,"SPADE"), Card(4,"CLUB"), Card(7,"HEART"), Card(7,"CLUB")])
 
-opposingHands = list(itertools.combinations(unknown, 5))
-player1Hands = [Hand(hand) for hand in list(itertools.combinations(player1hand, 5))]
+print(player1 < player2)
 
 # makeThemHands = [Hand(hand) for hand in possibleHands]
 # makeThemHands.sort()

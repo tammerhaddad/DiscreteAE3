@@ -2,7 +2,7 @@ from enum import Enum
 from testSuit import Suit
 class Card:
     def __init__(self, val, suit):
-        self.val = val 
+        self.value = val 
         self.suit = suit
     
     valToWord = {14: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
@@ -10,15 +10,15 @@ class Card:
 
     def __str__(self):
         try:
-            return self.valToWord[self.val] + " of " + self.suitToWord[self.suit.value]
+            return self.valToWord[self.value] + " of " + self.suitToWord[self.suit.value]
         except:
-            return str(self.val) + " of " + self.suit.value + "-"
+            return str(self.value) + " of " + self.suit.value + "-"
         
     def __lt__(self, other):
-        return self.val < other.val
+        return self.value < other.value
     
     def __eq__(self, other):
-        return self.val == other.val
+        return self.value == other.value
 
     def sameSuit(self, other):
         return self.suit == other.suit
