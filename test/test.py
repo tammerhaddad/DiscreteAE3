@@ -1,14 +1,10 @@
 from testHand import Hand
 from testDeck import Deck
-from testCard import Card
 import itertools
 import time
 start = time.time()
 fullTime = time.time()
 output = True
-
-def stringToHand(str):
-    return Hand([Card(int(a.split("-")[0]), a.split("-")[1]) for a in str.split(",")])
 
 def ptime(prefix):
     global start
@@ -26,13 +22,9 @@ def calc(players, deck, table):
     known = table + players[0]
     unknown = deck.cards + [card for player in players[1:] for card in player]
     ptime("Initialize")
-    oppHands = [Hand(hand) for hand in itertools.combinations(unknown, 2)]
-    combs = [Hand(hand) for hand in itertools.combinations(known, 5)]
     ptime("Hand Possibilities")
-    best = max(combs)
-    print(f"Table: {list(map(str, table))}\nHand: {list(map(str, players[0]))}\nBest Hand: {best}, {best.strRank()}")
-    return allHands.index(str(best))
-# print(f"Total Time: {time.time()-fullTime} seconds.")
+    # print(f"Table: {list(map(str, table))}\nHand: {list(map(str, players[0]))}\nBest Hand: {best}, {best.strRank()}")
+    return 0
 
 deck = Deck()
 players = [deck.draw(2) for _ in range(numPlayers)]
