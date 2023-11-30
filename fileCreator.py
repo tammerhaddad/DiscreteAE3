@@ -1,5 +1,5 @@
 from deck import Deck
-from test.hand import Hand
+from hand import Hand
 import itertools
 import time
 start = time.time()
