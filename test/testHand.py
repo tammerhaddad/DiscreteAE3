@@ -66,53 +66,47 @@ class Hand():
         return self.rank == other.rank
     
     def full_house_lt(self, other):
-        self_three_of_a_kind = None
-        self_pair = None
-        other_three_of_a_kind = None
-        other_pair = None
+        # Get the values of the three of a kind and the pair for both hands
+        self_three_of_kind = [value for value, count in Counter(card.value for card in self.hand).items() if count == 3]
+        other_three_of_kind = [value for value, count in Counter(card.value for card in other.hand).items() if count == 3]
+        self_pair = [value for value, count in Counter(card.value for card in self.hand).items() if count == 2]
+        other_pair = [value for value, count in Counter(card.value for card in other.hand).items() if count == 2]
 
-        for card in self.hand:
-            if self.hand.count(card) == 3:
-                self_three_of_a_kind = max(self_three_of_a_kind, card.value) if self_three_of_a_kind is not None else card.value
-            elif self.hand.count(card) == 2:
-                self_pair = max(self_pair, card.value) if self_pair is not None else card.value
-
-        for card in other.hand:
-            if other.hand.count(card) == 3:
-                other_three_of_a_kind = max(other_three_of_a_kind, card.value) if other_three_of_a_kind is not None else card.value
-            elif other.hand.count(card) == 2:
-                other_pair = max(other_pair, card.value) if other_pair is not None else card.value
-
-        if self_three_of_a_kind == other_three_of_a_kind:
-            return self_pair < other_pair
-        return self_three_of_a_kind
+        # Compare the three of a kind first
+        if self_three_of_kind[0] < other_three_of_kind[0]:
+            return True
+        elif self_three_of_kind[0] > other_three_of_kind[0]:
+            return False
+        # If the three of a kind are equal, compare the pair
+        else:
+            if self_pair[0] < other_pair[0]:
+                return True
+            else:
+                return False
 
     def full_house_equal(self, other):
-        self_three_of_a_kind = None
-        self_pair = None
-        other_three_of_a_kind = None
-        other_pair = None
+        # Get the values of the three of a kind and the pair for both hands
+        self_three_of_kind = [value for value, count in Counter(card.value for card in self.hand).items() if count == 3]
+        other_three_of_kind = [value for value, count in Counter(card.value for card in other.hand).items() if count == 3]
+        self_pair = [value for value, count in Counter(card.value for card in self.hand).items() if count == 2]
+        other_pair = [value for value, count in Counter(card.value for card in other.hand).items() if count == 2]
 
-        for card in self.hand:
-            if self.hand.count(card) == 3:
-                self_three_of_a_kind = max(self_three_of_a_kind, card.value) if self_three_of_a_kind is not None else card.value
-            elif self.hand.count(card) == 2:
-                self_pair = max(self_pair, card.value) if self_pair is not None else card.value
+        # Compare the three of a kind first
+        if self_three_of_kind[0] != other_three_of_kind[0]:
+            return False
+        # If the three of a kind are equal, compare the pair
+        else:
+            if self_pair[0] != other_pair[0]:
+                return False
+            else:
+                return True
 
-        for card in other.hand:
-            if other.hand.count(card) == 3:
-                other_three_of_a_kind = max(other_three_of_a_kind, card.value) if other_three_of_a_kind is not None else card.value
-            elif other.hand.count(card) == 2:
-                other_pair = max(other_pair, card.value) if other_pair is not None else card.value
-
-        return self_three_of_a_kind == other_three_of_a_kind and self_pair == other_pair
-    
-    def of_kind_lt(self, other, count):
+    def of_kind_lt(self, other, occurance):
         self_counts = Counter(card.value for card in self.hand)
         other_counts = Counter(card.value for card in other.hand)
 
-        self_of_kind = [value for value, count in self_counts.items() if count == count]
-        other_of_kind = [value for value, count in other_counts.items() if count == count]
+        self_of_kind = [value for value, count in self_counts.items() if count == occurance]
+        other_of_kind = [value for value, count in other_counts.items() if count == occurance]
 
         self_extra = [value for value, count in self_counts.items() if count == 1]
         other_extra = [value for value, count in other_counts.items() if count == 1]
@@ -140,7 +134,7 @@ class Hand():
         return True
     
     def __str__(self):
-        return ','.join(map(str, self.hand))
+        return ','.join(map(str, self.hand)) + " " + self.strRank()
 
     def flush(self):
         return all(card.suit == self.hand[0].suit for card in self.hand)
