@@ -1,6 +1,5 @@
-from enum import Enum
 import pygame
-from suit import Suit
+
 class Card:
     valToWord = {14: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
@@ -17,12 +16,12 @@ class Card:
         return f"{self.value}-{self.suit.value}"
         
     def __lt__(self, other):
-        if(self.value == other.val):
+        if(self.value == other.value):
             return self.suit.value < other.suit.value
-        return self.value < other.val
+        return self.value < other.value
     
     def __eq__(self, other):
-        return self.value == other.val and self.suit == other.suit
+        return self.value == other.value and self.suit == other.suit
     
     def __hash__(self):
         return hash((self.value, self.suit, self.back))
