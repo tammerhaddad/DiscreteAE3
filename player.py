@@ -1,5 +1,3 @@
-from card import Card
-
 class Player:
     def __init__(self, id, hand):
         self.id = id

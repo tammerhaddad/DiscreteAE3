@@ -1,6 +1,6 @@
 from enum import Enum
 import pygame
-from testSuit import Suit
+from suit import Suit
 class Card:
     valToWord = {14: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
