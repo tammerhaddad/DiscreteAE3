@@ -7,8 +7,6 @@ class Hand():
 
     def __lt__(self, other):
         if self.rank == other.rank:
-            self.hand.sort(reverse = True)
-            other.hand.sort(reverse = True)
             if self.rank == 8:
                 return self.of_kind_lt(other, 4)
             elif self.rank == 7:
@@ -25,8 +23,6 @@ class Hand():
     
     def __eq__(self, other):
         if self.rank == other.rank:
-            self.sort_hand_value()
-            other.sort_hand_value()
             if self.rank == 8:
                 return self.of_kind_equal(other, 4)
             elif self.rank == 7:
@@ -89,14 +85,8 @@ class Hand():
     def of_kind_equal(self, other, count):
         self_of_kind= [card.value for card in self.hand if self.hand.count(card) == count]
         other_of_kind = [card.value for card in other.hand if other.hand.count(card) == count]
-        self_of_kind.sort(reverse=True)
-        other_of_kind.sort(reverse=True)
-
         self_extra= [card.value for card in self.hand if self.hand.count(card) == 1]
         other_extra = [card.value for card in other.hand if other.hand.count(card) == 1]
-        self_extra.sort(reverse=True)
-        other_extra.sort(reverse=True)
-
         for i in range(len(self_of_kind)):
             if self_of_kind[i] != other_of_kind[i]:
                 return False
@@ -112,7 +102,6 @@ class Hand():
         return all(card.suit == self.hand[0].suit for card in self.hand)
     
     def straight(self):
-        self.sort_hand_value()
         values = [card.value for card in self.hand]
         return values == list(range(min(values), max(values)+1))
     
