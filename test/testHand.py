@@ -61,18 +61,10 @@ class Hand():
     def of_kind_lt(self, other, count):
         self_of_kind= [card.value for card in self.hand if self.hand.count(card) == count]
         other_of_kind = [card.value for card in other.hand if other.hand.count(card) == count]
-        self_of_kind.sort(reverse=True)
-        other_of_kind.sort(reverse=True)
-        print(self_of_kind)
-        print(other_of_kind)
 
         self_extra= [card.value for card in self.hand if self.hand.count(card) == 1]
         other_extra = [card.value for card in other.hand if other.hand.count(card) == 1]
-        self_extra.sort(reverse=True)
-        other_extra.sort(reverse=True)
-        print(self_extra)
-        print(other_extra)
-
+        
         for i in range(len(self_of_kind)):
             if self_of_kind[i] != other_of_kind[i]:
                 return self_of_kind[i] < other_of_kind[i]
@@ -114,7 +106,7 @@ class Hand():
         return list(value_counts.values()).count(2) == 2
     
     def full_house(self):
-        return self.of_a_kind(3) and self.two_pair()
+        return self.of_a_kind(3) and self.of_a_kind(2)
     
     def rank(self):
         rank = 1
