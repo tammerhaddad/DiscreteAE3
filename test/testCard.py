@@ -17,6 +17,6 @@ class Card:
     
     def __eq__(self, other):
         return self.value == other.value
-
-    def sameSuit(self, other):
-        return self.suit == other.suit
+    
+    def __hash__(self):
+        return hash((self.value, self.suit))

@@ -20,46 +20,37 @@ with open('sorted.pkl', 'rb') as file:
 ptime("Read")
 length = len(allHands)
 numPlayers = 2
-deck = Deck()
-
+blankDeck = Deck()
 def play():
+    deck = Deck()
     players = [deck.draw(2) for _ in range(numPlayers)]
     table = []
-    for i in range(4):
-        # print(f"Prob = {prob(players, deck, table)/length}")
-        print(f"Table: {list(map(str, table))}\nHand: {list(map(str, players[0]))}")
-        input("enter for next")
+    for i in range(3):
+        print(f"Prob: {prob(players, table)}")
+        # input("enter for next")
         if i == 0:
             table += deck.draw(3)
         else:
             table += deck.draw()
-    print(win(players, table))
+        ptime("Step")
+    print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
 
-def win(players, table):
+def lose(players, table):
     combs = [itertools.combinations(player + table, 5) for player in players]
-    bestHand = max([Hand(list(comb)) for comb in combs])
-    return bestHand
+    bestHands = [max(map(Hand, combs)) for combs in combs]
+    return bool(bestHands.index(max(bestHands)))
+
+
 #------------------------------------------------------------------
 
+def prob(players, table):
+    known = players[0] + table
+    unknown = set(blankDeck.cards) - set(itertools.chain(*players[1:])) - set(table)
+    possibleTables = [table + list(comb) for comb in itertools.combinations(unknown, 5 - len(table))]
+    return len(possibleTables)
+#------------------------------------------------------------------
+
+ptime("Before")
 play()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ptime("After")
