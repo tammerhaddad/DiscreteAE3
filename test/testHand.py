@@ -7,8 +7,8 @@ class Hand():
 
     def __lt__(self, other):
         if self.rank == other.rank:
-            self.sort_hand_value()
-            other.sort_hand_value()
+            self.hand.sort(reverse = True)
+            other.hand.sort(reverse = True)
             if self.rank == 8:
                 return self.of_kind_lt(other, 4)
             elif self.rank == 7:
@@ -22,6 +22,25 @@ class Hand():
                     return self.hand[i] < other.hand[i]
             return self.hand[0] < other.hand[0]
         return self.rank < other.rank
+    
+    def __eq__(self, other):
+        if self.rank == other.rank:
+            self.sort_hand_value()
+            other.sort_hand_value()
+            if self.rank == 8:
+                return self.of_kind_equal(other, 4)
+            elif self.rank == 7:
+                return self.full_house_equal(other)
+            elif self.rank == 4:
+                return self.of_kind_equal(other, 3)
+            elif self.rank in [3,2]:
+                return self.of_kind_equal(other, 2)
+            for i in range(len(self.hand)):
+                if self.hand[i] != other.hand[i]:
+                    return  False
+            return True
+        return self.rank == other.rank
+    
     
     def full_house_lt(self, other):
         self_three_of_a_kind = max([card.value for card in self.hand if self.hand.count(card) == 3])
@@ -48,15 +67,20 @@ class Hand():
         other_of_kind = [card.value for card in other.hand if other.hand.count(card) == count]
         self_of_kind.sort(reverse=True)
         other_of_kind.sort(reverse=True)
+        print(self_of_kind)
+        print(other_of_kind)
 
         self_extra= [card.value for card in self.hand if self.hand.count(card) == 1]
         other_extra = [card.value for card in other.hand if other.hand.count(card) == 1]
         self_extra.sort(reverse=True)
         other_extra.sort(reverse=True)
+        print(self_extra)
+        print(other_extra)
 
         for i in range(len(self_of_kind)):
             if self_of_kind[i] != other_of_kind[i]:
                 return self_of_kind[i] < other_of_kind[i]
+        for i in range(len(self_extra)):
         for i in range(len(self_extra)):
             if self_extra[i] != other_extra[i]:
                 return  self_extra[i] < other_extra[i]
@@ -81,24 +105,6 @@ class Hand():
             if self_extra[i] != other_extra[i]:
                 return  False
         return True
-    
-    def __eq__(self, other):
-        if self.rank == other.rank:
-            self.sort_hand_value()
-            other.sort_hand_value()
-            if self.rank == 8:
-                return self.of_kind_equal(other, 4)
-            elif self.rank == 7:
-                return self.full_house_equal(other)
-            elif self.rank == 4:
-                return self.of_kind_equal(other, 3)
-            elif self.rank in [3,2]:
-                return self.of_kind_equal(other, 2)
-            for i in range(len(self.hand)):
-                if self.hand[i] != other.hand[i]:
-                    return  False
-            return True
-        return self.rank == other.rank
     
     def __str__(self):
         return ', '.join(map(str, self.hand))
@@ -143,13 +149,3 @@ class Hand():
         else:
             rank = 1
         return rank
-    
-    def sort_hand_value(self):
-        self.hand.sort(key=lambda card: (card.value == 1, card.value), reverse=True)
-
-    def sort_hand_suit(self):
-        self.hand.sort(key=lambda card: card.suit)
-    
-    def sort_hand(self):
-        self.sort_hand_value()
-        self.sort_hand_suit()
