@@ -12,10 +12,12 @@ class Card:
         return f"{self.val}-{self.suit.value}"
         
     def __lt__(self, other):
+        if(self.val == other.val):
+            return self.suit.value < other.suit.value
         return self.val < other.val
     
     def __eq__(self, other):
-        return self.val == other.val
+        return self.val == other.val and self.suit == other.suit
 
     def sameSuit(self, other):
         return self.suit == other.suit
