@@ -2,7 +2,7 @@ from collections import Counter
 
 class Hand():
     def __init__(self, hand):
-        self.hand = hand
+        self.hand = sorted(hand)
         self.rank = self.rank()
     
     def strRank(self):
@@ -26,13 +26,13 @@ class Hand():
         return self.rank == other.rank
     
     def __str__(self):
-        return ', '.join(map(str, self.hand))
+        return ','.join(map(str, self.hand))
 
     def flush(self):
         return all(card.suit == self.hand[0].suit for card in self.hand)
     
     def straight(self):
-        values = sorted([card.val for card in self.hand])
+        values = [card.val for card in self.hand]
         return values == list(range(min(values), max(values)+1)) or values == [14, 2, 3, 4, 5]
     
     def of_a_kind(self, num):
@@ -49,15 +49,14 @@ class Hand():
     def rank(self):
         rank = 1
         if self.flush() and self.straight():
-            rank = 10
-        elif self.flush():
             rank = 9
+            if(min(self.hand).val == 10):
+                rank = 10
         elif self.of_a_kind(4):
             rank = 8
         elif self.full_house():
             rank = 7
         elif self.flush():
-            print(self)
             rank = 6
         elif self.straight():
             rank = 5

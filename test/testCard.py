@@ -9,10 +9,7 @@ class Card:
     suitToWord = {"S": "Spades", "C": "Clubs", "H": "Hearts", "D": "Diamonds"}
 
     def __str__(self):
-        try:
-            return self.valToWord[self.val] + " of " + self.suitToWord[self.suit.value]
-        except:
-            return str(self.val) + " of " + self.suit.value + "-"
+        return f"{self.val}-{self.suit.value}"
         
     def __lt__(self, other):
         return self.val < other.val
