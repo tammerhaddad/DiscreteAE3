@@ -4,7 +4,7 @@ import itertools
 import time
 start = time.time()
 def write(path, hands):
-    with open(f"test/{path}", 'w') as file:
+    with open(f"{path}", 'w') as file:
         for hand in hands:
             file.write(f"{hand}\n")
 

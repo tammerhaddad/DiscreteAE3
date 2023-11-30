@@ -10,7 +10,7 @@ class Deck:
                 self.cards.append(Card(value+2, suit))
         self.shuffle()
 
-    def draw(self, num):
+    def draw(self, num = 1):
         drawn = self.cards[:num]
         self.cards = self.cards[num:]
         return drawn

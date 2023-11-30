@@ -17,7 +17,7 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-allHands = open('test/sorted.txt').read().splitlines()
+allHands = open('sorted.txt').read().splitlines()
 ptime("Read")
 length = len(allHands)
 numPlayers = 2
@@ -36,5 +36,13 @@ def calc(players, deck, table):
 
 deck = Deck()
 players = [deck.draw(2) for _ in range(numPlayers)]
-table = deck.draw(5)
-print(f"Prob = {calc(players, deck, table)/length}")
+table = []
+
+for i in range(4):
+    # print(f"Prob = {calc(players, deck, table)/length}")
+    print(f"Table: {list(map(str, table))}\nHand: {list(map(str, players[0]))}")
+    input("enter for next")
+    if i == 0:
+        table += deck.draw(3)
+    else:
+        table += deck.draw()
