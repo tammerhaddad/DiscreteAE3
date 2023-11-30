@@ -3,6 +3,7 @@ from testDeck import Deck
 import itertools
 import time
 import pickle
+import numpy as np
 
 start = time.time()
 fullTime = time.time()
@@ -18,6 +19,8 @@ def ptime(prefix):
 with open('sorted.pkl', 'rb') as file:
     allHands = pickle.load(file)
 ptime("Read")
+setHands = set(allHands)
+ptime("toSet")
 length = len(allHands)
 numPlayers = 2
 blankDeck = Deck()
@@ -36,19 +39,20 @@ def play():
     print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
 
-def lose(players, table):
-    combs = [itertools.combinations(player + table, 5) for player in players]
-    bestHands = [max(map(Hand, combs)) for combs in combs]
-    return bool(bestHands.index(max(bestHands)))
+def win(players, table):
+    bestHands = []
+    for player in players:
+        combs = itertools.combinations(player + table, 5)
+        bestHands.append(max(map(Hand, combs)))
+    return not bool(bestHands.index(max(bestHands)))
 
 
 #------------------------------------------------------------------
 
 def prob(players, table):
-    known = players[0] + table
-    unknown = set(blankDeck.cards) - set(itertools.chain(*players[1:])) - set(table)
-    possibleTables = [table + list(comb) for comb in itertools.combinations(unknown, 5 - len(table))]
-    return len(possibleTables)
+    setHands
+    return
+
 #------------------------------------------------------------------
 
 ptime("Before")
