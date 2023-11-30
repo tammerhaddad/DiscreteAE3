@@ -1,5 +1,6 @@
 from enum import Enum
 from testSuit import Suit
+
 class Card:
     def __init__(self, val, suit):
         self.val = val 
