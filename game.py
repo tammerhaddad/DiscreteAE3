@@ -10,4 +10,3 @@ def play():
         if i == 3:
             break
         game.updateProbs()
-

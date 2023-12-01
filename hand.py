@@ -28,10 +28,10 @@ class Hand():
             elif self.rank in [5,9]:
                 self_values = [card.value for card in self.hand]
                 other_values = [card.value for card in other.hand]
-                if 14 in self_values:
+                if 14 in self_values and 2 in self_values:
                     self_values.remove(14)
                     self_values.append(1)
-                if 14 in other_values:
+                if 14 in other_values and 2 in other_values:
                     other_values.remove(14)
                     other_values.append(1)
                 self_values.sort(reverse=True)

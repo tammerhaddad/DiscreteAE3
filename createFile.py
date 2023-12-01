@@ -4,10 +4,15 @@ import itertools
 import time
 import pickle
 
+
 start = time.time()
 def write(path, hands):
-    with open(f"{path}", 'wb') as file:
+    with open(f"{path}.txt", 'wb') as file:
+        file.write('\n'.join(str(hand) for hand in sorted(hands)).encode())
+        ptime("Sort")
+    with open(f"{path}.pkl", 'wb') as file:
         pickle.dump(hands, file, pickle.HIGHEST_PROTOCOL)
+
 
 def ptime(prefix):
     global start
@@ -18,11 +23,8 @@ deck = Deck()
 mixes = itertools.combinations(deck.cards, 5)
 ptime("Calculate")
 
-hands = [Hand(hand) for hand in mixes]
+hands = set(Hand(hand) for hand in mixes)
 ptime("Convert")
 
-hands.sort()
-ptime("Sort")
-
-write("sorted.pkl", hands)
+write("sorted", hands)
 ptime("Write and Finish")
