@@ -15,12 +15,12 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-# with open('sorted.pkl', 'rb') as file:
-#     allHands = pickle.load(file)
-# ptime("Read")
-# setHands = set(allHands)
-# ptime("toSet")
-# length = len(allHands)
+with open('sorted.pkl', 'rb') as file:
+    allHands = pickle.load(file)
+ptime("Read")
+setHands = set(allHands)
+ptime("toSet")
+length = len(allHands)
 numPlayers = 2
 blankDeck = Deck()
 
