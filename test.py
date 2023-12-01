@@ -31,32 +31,26 @@ def play():
     players = [deck.draw(2) for _ in range(numPlayers)]
     table = []
     for i in range(4):
-        print(f"Prob: {prob(players, table)}")
         # input("enter for next")
         if i == 1:
             table += deck.draw(3)
+            
+            print(f"Prob: {postFlop(players, table)}")
         elif i > 1:
             table += deck.draw()
+            print(f"Prob: {postFlop(players, table)}")
+        print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
         ptime("Step")
-    print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
+def bestHand(player, table):
+    return max([Hand(hand) for hand in itertools.combinations(player+table, 5)])
 
-def win(players, table):
-    bestHands = []
-    for player in players:
-        combs = itertools.combinations(player + table, 5)
-        bestHands.append(max(map(Hand, combs)))
-    return not bool(bestHands.index(max(bestHands)))
-
-def bestHand(hands):
-    return max(hands)
 #------------------------------------------------------------------
 
-def prob(players, table):
-    # p1Hands = set(hand for hand in setHands if any(card in hand.hand for card in players[0]+table))
-    unknown = set(blankDeck.cards) - set(players[0]) - set(table)
-    possibleTables = set(itertools.combinations(unknown, 5 - len(table)))
-    return Hand(list(max(possibleTables)))
+def postFlop(players, table):
+    bHand = bestHand(players[0], table)
+    return bHand
+
 
 #------------------------------------------------------------------
 
