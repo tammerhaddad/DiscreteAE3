@@ -24,6 +24,16 @@ class Card:
     def __hash__(self):
         return hash((self.value, self.suit))
 
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state["image"]
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        # Add baz back since it doesn't exist in the pickle
+        self.image = pygame.image.load(self.path)
+
     def scale(self, table_width):
         relative_width = float(table_width) * 0.058
         relative_height = float(relative_width) * 1.4
