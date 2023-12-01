@@ -3,7 +3,7 @@ class Player:
         self.id = id
         self.name = f"Player {id}"
         self.hand = hand
-        self.blind_odds = 0
+        self.prob = 0
 
     def __str__(self):
         output = f'{self.name}: '
