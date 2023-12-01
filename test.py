@@ -63,3 +63,19 @@ def prob(players, table):
 ptime("Before")
 play()
 ptime("After")
+
+def prob(players):
+    allPlayersHands = [set(hand for hand in setHands if any(card in hand for card in player)) for player in players]
+
+    totalHands = set()
+    for playerHands in allPlayersHands:
+        totalHands = totalHands.union(playerHands)
+    playerExcludedHands = [totalHands - player for player in allPlayersHands]
+
+    listPlayerExcludedHands = [sorted(list(hands)) for hands in playerExcludedHands]
+    probs = []
+    for i in range(len(allPlayersHands)):
+        playerSum = sum(bisect(listPlayerExcludedHands[i], hand) for hand in allPlayersHands[i])
+        probs.append(playerSum/(len(allPlayersHands[i])*len(listPlayerExcludedHands[i])))
+
+    return probs
