@@ -1,5 +1,5 @@
 from poker import Poker
-game = Poker(6)
+game = Poker(2)
 
 for i in range(4):
     game.renderGame()
