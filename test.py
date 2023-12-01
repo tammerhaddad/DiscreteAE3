@@ -15,12 +15,12 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-with open('sorted.pkl', 'rb') as file:
-    allHands = pickle.load(file)
-ptime("Read")
-setHands = set(allHands)
-ptime("toSet")
-length = len(allHands)
+# with open('sorted.pkl', 'rb') as file:
+#     allHands = pickle.load(file)
+# ptime("Read")
+# setHands = set(allHands)
+# ptime("toSet")
+# length = len(allHands)
 numPlayers = 2
 blankDeck = Deck()
 
@@ -53,13 +53,9 @@ def postFlop(players, table):
     return calculate_probability(myHands, oppHands)
 
 def calculate_probability(list_a, list_b):
-    winning_pairs = 0
-    for item_a in list_a:
-        for item_b in list_b:
-            if item_a > item_b:
-                winning_pairs += 1
-
-    probability_a_beats_b = winning_pairs / (len(list_a)*len(list_b))
+    total_pairs = len(list_a) * len(list_b)
+    a_beats_b = sum(1 for item_a, item_b in itertools.product(list_a, list_b) if item_a > item_b)
+    probability_a_beats_b = a_beats_b / total_pairs
     probability_b_beats_a = 1 - probability_a_beats_b
 
     return probability_a_beats_b, probability_b_beats_a
