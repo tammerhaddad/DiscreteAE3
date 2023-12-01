@@ -34,13 +34,11 @@ def play():
         # input("enter for next")
         if i == 1:
             table += deck.draw(3)
-            
             print(f"Prob: {postFlop(players, table)}")
         elif i > 1:
             table += deck.draw()
             print(f"Prob: {postFlop(players, table)}")
-        print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
-        ptime("Step")
+    print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
 def bestHand(player, table):
     return max([Hand(hand) for hand in itertools.combinations(player+table, 5)])
@@ -48,12 +46,27 @@ def bestHand(player, table):
 #------------------------------------------------------------------
 
 def postFlop(players, table):
-    bHand = bestHand(players[0], table)
-    return bHand
+    unknown = set(blankDeck.cards) - set(players[0]) - set(table)
+    tables = [table+list(hand) for hand in itertools.combinations(unknown, 5-len(table))]
+    myHands = [bestHand(players[0], ptable) for ptable in tables]
+    oppHands = [bestHand(players[1], ptable) for ptable in tables]
+    return calculate_probability(myHands, oppHands)
 
+def calculate_probability(list_a, list_b):
+    winning_pairs = 0
+    for item_a in list_a:
+        for item_b in list_b:
+            if item_a > item_b:
+                winning_pairs += 1
+
+    probability_a_beats_b = winning_pairs / (len(list_a)*len(list_b))
+    probability_b_beats_a = 1 - probability_a_beats_b
+
+    return probability_a_beats_b, probability_b_beats_a
 
 #------------------------------------------------------------------
-
-ptime("Before")
-play()
-ptime("After")
+for _ in range(5):
+    ptime("Before")
+    play()
+    ptime("After")
+    print("--------------------------------------")
