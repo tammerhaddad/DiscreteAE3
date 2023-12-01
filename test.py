@@ -53,9 +53,10 @@ def bestHand(hands):
 #------------------------------------------------------------------
 
 def prob(players, table):
-    # p1Hands = set(hand for hand in setHands if any(card in hand.hand for card in players[0]+table))
+    p1Hands = set(hand for hand in setHands if any(card in hand.hand for card in players[0]+table))
     unknown = set(blankDeck.cards) - set(players[0]) - set(table)
     possibleTables = set(itertools.combinations(unknown, 5 - len(table)))
+    
     return Hand(list(max(possibleTables)))
 
 #------------------------------------------------------------------
@@ -63,3 +64,4 @@ def prob(players, table):
 ptime("Before")
 play()
 ptime("After")
+
