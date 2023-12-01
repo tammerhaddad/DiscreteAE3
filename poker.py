@@ -15,7 +15,7 @@ class Poker:
         self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
         self.deck = Deck()
-        for player in range(numPlayers): 
+        for player in range(min(numPlayers,6)): 
             self.deck.shuffle()
             self.players.append(Player(player, self.deck.draw(2)))
 
@@ -47,33 +47,8 @@ class Poker:
         for i in range(len(self.players)):
             self.players[i].prob = probs[i]
 
-    def renderBackground(self):
-        self.window.fill((40, 40, 43))
-        screen_width, screen_height = self.window.get_size()
-        if screen_width / screen_height  > 2:
-            width = screen_height * 2 
-            height = screen_height
-            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
-            offset = (screen_width - width) / 2
-            wide = True
-            self.window.blit(table, (offset, 0))
-        else:
-            width = screen_width 
-            height = screen_width / 2
-            table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
-            offset = (screen_height - height) / 2
-            self.window.blit(table, (0, offset))
-            wide = False
-        return (width, height, offset, wide)
-    
     def pause(self):
-        dimensions = self.renderBackground()
-        for player in self.players:
-            for card in player.hand:
-                card.scale(dimensions[0])
-        for card in self.table:
-            card.scale(dimensions[0])
-        self.renderGame()
+        self.render()
         pygame.time.wait(500)
 
     def gameUpdate(self):
@@ -85,33 +60,36 @@ class Poker:
                 return False
         return True
     
-    def renderGame(self):
+    def render(self):
         cardSpacing = .0718
         tableOrigin = (.32786, .465573)
         playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
-        width, height, offset, wide = self.renderBackground()
-        if wide:
-            for i in range(len(self.table)):
-                self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset, tableOrigin[1] * height))
-            
-            for i in range(len(self.players)):
-                font = pygame.font.Font(None, 36)
-                text = font.render(f"Probability: {self.players[i].prob:.2f}", 1, (10, 10, 10))
-                text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
-                self.window.blit(text, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height - 0.05 * height))
-                self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height))
-                self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset, playerOrigins[i][1] * height))
-        else:
-            for i in range(len(self.table)):
-                self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing , tableOrigin[1] * height + offset))
+        self.window.fill((40, 40, 43))
+        screen_width, screen_height = self.window.get_size()
+        wide = screen_width / screen_height > 2
+        width = screen_height * 2 if wide else 1
+        height = screen_height / 1 if wide else 2
+        table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
+        offset = (screen_width - width) if wide else (screen_height - height) / 2
 
-            for i in range(len(self.players)):
-                font = pygame.font.Font(None, 36)
-                text = font.render(f"Probability: {self.players[i].prob:.2f}", 1, (10, 10, 10))
-                text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
-                self.window.blit(text, (playerOrigins[i][0] * width, playerOrigins[i][1] * height - 0.05 * height + offset))
-                self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width, playerOrigins[i][1] * height + offset))
-                self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + offset))
+        self.window.blit(table, (offset, 0) if wide else (0, offset))
+
+        for player in self.players:
+            for card in player.hand:
+                card.scale(width)
+        for card in self.table:
+            card.scale(width)
+
+        for i in range(len(self.table)):
+            self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset if wide else 0, tableOrigin[1] * height + 0 if wide else offset))
+        
+        for i in range(len(self.players)):
+            font = pygame.font.Font(None, 36)
+            text = font.render(f"Probability: {self.players[i].prob:.2f}", 1, (10, 10, 10))
+            text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
+            self.window.blit(text, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height - 0.05 * height))
+            self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width+ offset if wide else 0, playerOrigins[i][1] * height + 0 if wide else offset))
+            self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset if wide else 0, playerOrigins[i][1] * height+ 0 if wide else offset))
 
         pygame.display.update()
