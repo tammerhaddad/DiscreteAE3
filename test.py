@@ -45,24 +45,16 @@ def bestHand(player, table):
 
 #------------------------------------------------------------------
 
-def postFlop(players, table):
+def prob(players, table):
+    p1Hands = set(hand for hand in setHands if any(card in hand.hand for card in players[0]+table))
     unknown = set(blankDeck.cards) - set(players[0]) - set(table)
-    tables = [table+list(hand) for hand in itertools.combinations(unknown, 5-len(table))]
-    myHands = [bestHand(players[0], ptable) for ptable in tables]
-    oppHands = [bestHand(players[1], ptable) for ptable in tables]
-    return calculate_probability(myHands, oppHands)
-
-def calculate_probability(list_a, list_b):
-    total_pairs = len(list_a) * len(list_b)
-    a_beats_b = sum(1 for item_a, item_b in itertools.product(list_a, list_b) if item_a > item_b)
-    probability_a_beats_b = a_beats_b / total_pairs
-    probability_b_beats_a = 1 - probability_a_beats_b
-
-    return probability_a_beats_b, probability_b_beats_a
+    possibleTables = set(itertools.combinations(unknown, 5 - len(table)))
+    
+    return Hand(list(max(possibleTables)))
 
 #------------------------------------------------------------------
-for _ in range(5):
-    ptime("Before")
-    play()
-    ptime("After")
-    print("--------------------------------------")
+
+ptime("Before")
+play()
+ptime("After")
+
