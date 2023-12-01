@@ -68,10 +68,10 @@ class Poker:
         self.window.fill((40, 40, 43))
         screen_width, screen_height = self.window.get_size()
         wide = screen_width / screen_height > 2
-        width = screen_height * 2 if wide else 1
-        height = screen_height / 1 if wide else 2
+        width = screen_height * 2 if wide else screen_width
+        height = screen_height if wide else screen_width / 2
         table = pygame.transform.scale(pygame.image.load('table.png'), (width, height)) 
-        offset = (screen_width - width) if wide else (screen_height - height) / 2
+        offset = (screen_width - width) / 2 if wide else (screen_height - height) / 2
 
         self.window.blit(table, (offset, 0) if wide else (0, offset))
 
@@ -82,14 +82,14 @@ class Poker:
             card.scale(width)
 
         for i in range(len(self.table)):
-            self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset if wide else 0, tableOrigin[1] * height + 0 if wide else offset))
+            self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset if wide else tableOrigin[0] * width + i * width * cardSpacing, tableOrigin[1] * height + 0 if wide else tableOrigin[1] * height + offset))
         
         for i in range(len(self.players)):
             font = pygame.font.Font(None, 36)
             text = font.render(f"Probability: {self.players[i].prob:.2f}", 1, (10, 10, 10))
-            text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height)))  # Scale the text to 20% of the width and 5% of the height
-            self.window.blit(text, (playerOrigins[i][0] * width + offset, playerOrigins[i][1] * height - 0.05 * height))
-            self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width+ offset if wide else 0, playerOrigins[i][1] * height + 0 if wide else offset))
-            self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset if wide else 0, playerOrigins[i][1] * height+ 0 if wide else offset))
+            text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height))) 
+            self.window.blit(text, (playerOrigins[i][0] * width + (offset if wide else 0), playerOrigins[i][1] * height - 0.05 * height + (0 if wide else offset)))
+            self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width + offset if wide else playerOrigins[i][0] * width, playerOrigins[i][1] * height + 0 if wide else playerOrigins[i][1] * height + offset))
+            self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset if wide else playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + 0 if wide else playerOrigins[i][1] * height + offset))
 
         pygame.display.update()

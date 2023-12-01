@@ -3,10 +3,12 @@ game = Poker(2)
 
 def play():
     for i in range(4):
-        game.renderGame()
+        game.render()
         while game.gameUpdate():
             game.pause()
         game.dealTable(i)
         if i == 3:
             break
         game.updateProbs()
+
+play()
