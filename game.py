@@ -6,9 +6,9 @@ def play():
         game.render()
         while game.gameUpdate():
             game.pause()
-        game.dealTable(i)
         if i == 3:
             break
+        game.dealTable(i)
         game.updateProbs()
 
 play()

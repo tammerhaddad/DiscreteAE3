@@ -1,6 +1,7 @@
 class Player:
-    def __init__(self, id, hand):
+    def __init__(self, id, hand, origin = (0,0)):
         self.id = id
+        self.origin = origin
         self.name = f"Player {id}"
         self.hand = hand
         self.prob = 0

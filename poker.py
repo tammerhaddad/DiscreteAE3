@@ -4,7 +4,6 @@ from hand import Hand
 from player import Player
 import pygame
 import itertools
-
 # 6 player graphical max
 class Poker:
     def __init__(self, numPlayers = 2):
@@ -15,9 +14,10 @@ class Poker:
         self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
         self.deck = Deck()
-        for player in range(min(numPlayers,6)): 
+        for player in range(min(numPlayers,6)):
+            playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
             self.deck.shuffle()
-            self.players.append(Player(player, self.deck.draw(2)))
+            self.players.append(Player(player, self.deck.draw(2), playerOrigins[player]))
 
     def dealTable(self, step):
         if step == 0:
@@ -44,8 +44,8 @@ class Poker:
 
     def updateProbs(self):
         probs = self.postFlop([player.hand for player in self.players], self.table, self.deck)
-        for i in range(len(self.players)):
-            self.players[i].prob = probs[i]
+        for i, player in enumerate(self.players):
+            player.prob = probs[i]
 
     def pause(self):
         self.render()
@@ -63,7 +63,6 @@ class Poker:
     def render(self):
         cardSpacing = .0718
         tableOrigin = (.32786, .465573)
-        playerOrigins = ((.19836, .760655), (.668852, .760655), (.19836, .06557), (.668852, .06557), (.434426, .760655), (.434426, .06557), (.137705, .36393), (.86393, .636065))
 
         self.window.fill((40, 40, 43))
         screen_width, screen_height = self.window.get_size()
@@ -84,12 +83,12 @@ class Poker:
         for i in range(len(self.table)):
             self.window.blit(self.table[i].image, (tableOrigin[0] * width + i * width * cardSpacing + offset if wide else tableOrigin[0] * width + i * width * cardSpacing, tableOrigin[1] * height + 0 if wide else tableOrigin[1] * height + offset))
         
-        for i in range(len(self.players)):
+        for i, player in enumerate(self.players):
             font = pygame.font.Font(None, 36)
-            text = font.render(f"Probability: {self.players[i].prob:.2f}", 1, (10, 10, 10))
+            text = font.render(f"Probability: {player.prob:.2f}", 1, (10, 10, 10))
             text = pygame.transform.scale(text, (int(0.25 * height), int(0.05 * height))) 
-            self.window.blit(text, (playerOrigins[i][0] * width + (offset if wide else 0), playerOrigins[i][1] * height - 0.05 * height + (0 if wide else offset)))
-            self.window.blit(self.players[i].hand[0].image, (playerOrigins[i][0] * width + offset if wide else playerOrigins[i][0] * width, playerOrigins[i][1] * height + 0 if wide else playerOrigins[i][1] * height + offset))
-            self.window.blit(self.players[i].hand[1].image, (playerOrigins[i][0] * width + cardSpacing * width + offset if wide else playerOrigins[i][0] * width + cardSpacing * width, playerOrigins[i][1] * height + 0 if wide else playerOrigins[i][1] * height + offset))
+            self.window.blit(text, (player.origin[0] * width + (offset if wide else 0), player.origin[1] * height - 0.05 * height + (0 if wide else offset)))
+            self.window.blit(player.hand[0].image, (player.origin[0] * width + offset if wide else player.origin[0] * width, player.origin[1] * height + 0 if wide else player.origin[1] * height + offset))
+            self.window.blit(player.hand[1].image, (player.origin[0] * width + cardSpacing * width + offset if wide else player.origin[0] * width + cardSpacing * width, player.origin[1] * height + 0 if wide else player.origin[1] * height + offset))
 
         pygame.display.update()
