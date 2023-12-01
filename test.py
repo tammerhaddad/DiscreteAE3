@@ -7,7 +7,7 @@ from bisect import bisect
 
 start = time.time()
 fullTime = time.time()
-output = True
+output = False
 
 def ptime(prefix):
     global start
@@ -16,12 +16,12 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-with open('sorted.pkl', 'rb') as file:
-    allHands = pickle.load(file)
-ptime("Read")
-setHands = set(allHands)
-ptime("toSet")
-length = len(allHands)
+# with open('sorted.pkl', 'rb') as file:
+#     allHands = pickle.load(file)
+# ptime("Read")
+# setHands = set(allHands)
+# ptime("toSet")
+# length = len(allHands)
 numPlayers = 3
 blankDeck = Deck()
 
@@ -45,7 +45,7 @@ def play():
             # probs = preFlop(players)
             # probs = postFlop(players, table, deck)
             pass
-        print(f"Prob: {probs} SUM: {sum(probs)}")
+        print(f"Prob: {probs}")
         if output: print(f"STEPTIME: {time.time()-stepTime}")
     print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
 
@@ -82,13 +82,12 @@ def postFlop(players, table, deck):
     unknown = set(deck.cards)
     ptables = [table+list(adds) for adds in itertools.combinations(unknown, 5-len(table))]
     # pHands = [[bestHand(player, ptable) for ptable in tables] for player in players]
-    print(len(ptables))
     ptime("ptables")
     winners = [winner(players, ptable) for ptable in ptables]
     return [winners.count(i)/len(winners) for i in range(len(players))]
 
 #------------------------------------------------------------------
-for _ in range(3):
+for _ in range(10):
     t = time.time()
     play()
     print(f"{time.time()-t:.2f}s ----------------------------")
