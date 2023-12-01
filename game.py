@@ -10,5 +10,5 @@ def play():
             break
         game.dealTable(i)
         game.updateProbs()
-
+    
 play()
