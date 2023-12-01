@@ -4,6 +4,7 @@ from hand import Hand
 from player import Player
 import pygame
 import itertools
+import pickle
 
 # 6 player graphical max
 class Poker:
@@ -15,10 +16,21 @@ class Poker:
         self.bounds = (1500, 750)
         self.window = pygame.display.set_mode(self.bounds, pygame.RESIZABLE)
         self.deck = Deck()
+        self.history = []
         for player in range(min(numPlayers,6)): 
             self.deck.shuffle()
             self.players.append(Player(player, self.deck.draw(2)))
 
+    def save(self):
+        self.history += [[str(card) for card in self.table]]
+        self.history += [[[str(card) for card in player.hand] for player in self.players]]
+        with open("history.txt", "w") as file:
+            file.write(str(self.history + [[str(card) for card in self.table]]))
+        with open("history.pkl", "wb") as file:
+            pickle.dump(self.history, file, pickle.HIGHEST_PROTOCOL)
+        for step in self.history:
+            print([str(item) for item in step])
+    
     def dealTable(self, step):
         if step == 0:
             self.table.extend(self.deck.draw(3))
@@ -38,9 +50,11 @@ class Poker:
         unknown = set(deck.cards)
         ptables = [table+list(adds) for adds in itertools.combinations(unknown, 5-len(table))]
         # pHands = [[bestHand(player, ptable) for ptable in tables] for player in players]
-        print(len(ptables))
         winners = [self.winner(players, ptable) for ptable in ptables]
-        return [winners.count(i)/len(winners) for i in range(len(players))]
+        probs = [winners.count(i)/len(winners) for i in range(len(players))]
+        # print(f"Probs: {[f'{prob:.2f}' for prob in probs]}")
+        self.history.append([f'{prob:.2f}' for prob in probs])
+        return probs
 
     def updateProbs(self):
         probs = self.postFlop([player.hand for player in self.players], self.table, self.deck)
