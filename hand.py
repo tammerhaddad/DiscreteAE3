@@ -64,7 +64,7 @@ class Hand():
                     return  False
             return True
         return self.rank == other.rank
-    
+
     def __hash__(self):
         return hash(tuple(self.hand))
     

@@ -32,22 +32,22 @@ def play():
     players = [deck.draw(2) for _ in range(numPlayers)]
     table = []
     print(f"Players: {[list(map(str, player)) for player in players]}")
-    print(f"Prob: {prob(players, table)}")
-    # for i in range(4):
-    #     # input("enter for next")
-    #     if i == 1:
-    #         table += deck.draw(3)
-    #         print(f"Table: {list(map(str, table))}")
-    #         print(f"Prob: {prob(players, table)}")
-    #     elif i > 1:
-    #         table += deck.draw()
-    #         print(f"Table: {list(map(str, table))}")
-    #         print(f"Prob: {prob(players, table)}")
     # print(f"Prob: {prob(players, table)}")
-    # print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
+    for i in range(4):
+        # input("enter for next")
+        if i == 1:
+            table += deck.draw(3)
+            print(f"Table: {list(map(str, table))}")
+            print(f"Prob: {prob(players, table)}")
+        elif i > 1:
+            table += deck.draw()
+            print(f"Table: {list(map(str, table))}")
+            print(f"Prob: {prob(players, table)}")
+    print(f"Table: {list(map(str, table))}\nHands: {[f'{list(map(str, player))}' for player in players]}")
+    print(f"Prob: {prob(players, table)}")
 
 def bestHand(player, table):
-    return max(set(Hand(hand) for hand in itertools.combinations(player.union(table), 5)))
+    return max(set(Hand(hand) for hand in itertools.combinations(player + table, 5)))
 
 #------------------------------------------------------------------
 
@@ -67,27 +67,23 @@ def calculate_probability(list_a, list_b):
     return probability_a_beats_b, probability_b_beats_a
 
 def prob(players, table):
-    playerSets = [set(player) for player in players]
     tableCards = set(table)
     playerCards = set().union(*players)
 
-    tableHands = [hand for hand in setHands if (not table or any(card in hand.hand for card in tableCards)) and not any(card in hand.hand for card in playerCards)]
+    unknown = set(blankDeck.cards) - playerCards - tableCards
+    tableHands = [table+list(hand) for hand in itertools.combinations(unknown, 5 - len(table))]
 
     wins = [0] * len(players)
-    numTableHands = len(tableHands)
-    ptime("prep")
-    for i in range(200000):
-        bestHands = [bestHand(player, set(tableHands[i].hand)) for player in playerSets]
-        wins[bestHands.index(max(bestHands))] += 1
-    ptime("10k comps")
-    probs = [win/200000 for win in wins]
+    for tableHand in tableHands:
+        for i in range(len(players)):
+            wins[i] += bisect(tableHand, bestHand(table, players[i]))
+    probs = [win/sum(wins) for win in wins]
     return probs
 
 #------------------------------------------------------------------
 # for _ in range(5):
-ptime("Before")
 play()
-ptime("After")
+ptime("round")
 print("--------------------------------------")
 
 
