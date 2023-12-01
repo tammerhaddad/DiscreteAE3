@@ -48,8 +48,8 @@ def win(players, table):
         bestHands.append(max(map(Hand, combs)))
     return not bool(bestHands.index(max(bestHands)))
 
-def bestHand(hands):
-    return max(hands)
+def bestHand(player, table):
+    return max([Hand(hand) for hand in itertools.combinations(player+table, 5)])
 #------------------------------------------------------------------
 
 def prob(players, table):
