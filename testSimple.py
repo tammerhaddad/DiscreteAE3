@@ -1,42 +1,46 @@
 import itertools
-i = 0
-# returns the best combination given a table and hands
-def bestHand(player, table):
-    global i
-    i += 1
-    best = max(hands.index(set(sorted(hand))) for hand in itertools.combinations(player+table, 3))
-    return best
-# returns the index in players of the player that won
-def winner(players, table):
-    bHands = [bestHand(player, table) for player in players]
-    return bHands.index(max(bHands))
+import time
+from bisect import bisect 
 
-def postFlop(players):
-    unknown = set(cards) - set(itertools.chain(*plist))
-    ptables = [list(adds) for adds in itertools.combinations(unknown, 2)]
-    # pHands = [[bestHand(player, ptable) for ptable in tables] for player in players]
-    winners = [winner(players, ptable) for ptable in ptables]
-    return [winners.count(i)/len(winners) for i in range(len(players))]
-cards = sorted(range(15))
-setHands = (set(comb) for comb in itertools.combinations(cards, 3))
+output = True
+start = time.time()
+def ptime(prefix):
+    global start
+    global output
+    if(output):
+        print(f"{prefix} Time: {time.time()-start:.2f}s")
+        start = time.time()
+
+cards = sorted(range(52))
+setHands = {set(comb) for comb in itertools.combinations(cards, 5)}
 hands = sorted(setHands)
+ptime("hands")
 
+def preFlopProb(a, b):
+    wins = 0
+    for hand_a in a:
+        wins += bisect(b, hand_a)
+    return wins / (len(a) * len(b))
 
 def preFlop(players):
-    playerHands = [[hand for hand in hands if any(card in hand for card in player)] for player in players]
-    # print(playerHands)
-    # sumHands = {itertools.chain(playerHands)}
-    # oppHands = [sorted(sumHands - player) for player in playerHands]
-    # pHands = [[bestHand(player, ptable) for ptable in tables] for player in players]
-    # winners = [winner(players, ptable) for ptable in ptables]
-    return [len(playerHands[0])]
+    allPlayerCards = set(itertools.chain(*players))
+    playerHands = [[hand for hand in hands if any(card in hand for card in player) and not any(card in hand for card in allPlayerCards.difference(player))] for player in players]
+    ptime("players")
+    allHands = {tuple(hand) for player in playerHands for hand in player}
+    oppHands = [sorted(allHands - set(tuple(hand) for hand in player)) for player in playerHands]
+    ptime("opps")
+    zipped = zip(playerHands, oppHands)
+    ratings = [preFlopProb(player, opp) for player, opp in zipped]
+    ptime("ratings")
+    return ratings
 
-a = [2, 7]
-b = [1, 8]
-c = [4, 6]
-d = [4, 5]
+a = [26, 42]
+b = [17, 35]
+c = [11, 49]
+d = [21, 30]
+e = [14, 38]
+f = [23, 47]
 plist = [a, b]
 table = []
-print(postFlop(plist))
-print(i)
-print(preFlop(plist))
+a = preFlop(plist)
+print(len(a[0]))

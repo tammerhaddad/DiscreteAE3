@@ -7,7 +7,7 @@ from bisect import bisect
 
 start = time.time()
 fullTime = time.time()
-output = False
+output = True
 
 def ptime(prefix):
     global start
@@ -60,18 +60,23 @@ def winner(players, table):
 #------------------------------------------------------------------
 # FAILED PREFLOP CALCULATOR
 
-def preFlop(players):
-    playerHands = [set(filter(lambda hand: any(card in hand.hand for card in player), setHands)) for player in players]
-    pTables = setHands - set.union(*playerHands)
-    print(len(pTables))
-    return [len(hands) for hands in playerHands]
-
-
 def preFlopProb(a, b):
     wins = 0
     for hand_a in a:
         wins += bisect(b, hand_a)
     return wins / (len(a) * len(b))
+
+def preFlop(players):
+    allPlayerCards = set(itertools.chain(*players))
+    playerHands = [[hand for hand in allHands if any(card in hand for card in player) and not any(card in hand for card in allPlayerCards.difference(player))] for player in players]
+    ptime("players")
+    allHands = {tuple(hand) for player in playerHands for hand in player}
+    oppHands = [sorted(allHands - set(tuple(hand) for hand in player)) for player in playerHands]
+    ptime("opps")
+    zipped = zip(playerHands, oppHands)
+    ratings = [preFlopProb(player, opp) for player, opp in zipped]
+    ptime("ratings")
+    return ratings
 
 #----------------------------------------------------------
 # Prob Calculator (can be used for preflop but would take 1439 times longer than post flop, 20 minutes on my computer)
