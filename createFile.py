@@ -8,10 +8,13 @@ import pickle
 start = time.time()
 def write(path, hands):
     with open(f"{path}.txt", 'wb') as file:
-        file.write('\n'.join(str(hand) for hand in sorted(hands)).encode())
+        sortedHands = sorted(hands)
         ptime("Sort")
+        file.write('\n'.join(str(hand) for hand in sortedHands).encode())
+        ptime("Write txt")
     with open(f"{path}.pkl", 'wb') as file:
         pickle.dump(hands, file, pickle.HIGHEST_PROTOCOL)
+        ptime("Write pkl")
 
 
 def ptime(prefix):
@@ -27,4 +30,4 @@ hands = set(Hand(hand) for hand in mixes)
 ptime("Convert")
 
 write("sorted", hands)
-ptime("Write and Finish")
+ptime("Finish")

@@ -16,12 +16,10 @@ def ptime(prefix):
         print(f"{prefix} Time: {time.time()-start:.2f}s")
         start = time.time()
 
-# with open('sorted.pkl', 'rb') as file:
-#     allHands = pickle.load(file)
-# ptime("Read")
-# setHands = set(allHands)
-# ptime("toSet")
-# length = len(allHands)
+with open('sorted.pkl', 'rb') as file:
+    setHands = pickle.load(file)
+ptime("Read")
+length = len(setHands)
 numPlayers = 3
 blankDeck = Deck()
 
@@ -87,7 +85,7 @@ def postFlop(players, table, deck):
     return [winners.count(i)/len(winners) for i in range(len(players))]
 
 #------------------------------------------------------------------
-for _ in range(10):
+for _ in range(1):
     t = time.time()
     play()
     print(f"{time.time()-t:.2f}s ----------------------------")
