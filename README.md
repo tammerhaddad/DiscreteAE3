@@ -4,7 +4,7 @@
 a. Python 3\
 b. itertools\
 c. pygame\
-d. from bisect import bisect
+d. from bisect import bisect\
 e. pickle\
 f. random\
 g. from collections import Counter
