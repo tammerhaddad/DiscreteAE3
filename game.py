@@ -7,9 +7,10 @@ def play():
         while game.gameUpdate():
             game.pause()
         if i == 3:
-            # game.save()
+            game.save()
             break
         game.dealTable(i)
         game.updateProbs()
-for i in range(3):
+
+for i in range(100):
     play()

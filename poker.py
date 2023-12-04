@@ -25,12 +25,10 @@ class Poker:
     def save(self):
         self.history += [[str(card) for card in self.table]]
         self.history += [[[str(card) for card in player.hand] for player in self.players]]
-        with open("history.txt", "w") as file:
-            file.write(str(self.history + [[str(card) for card in self.table]]))
-        with open("history.pkl", "wb") as file:
-            pickle.dump(self.history, file, pickle.HIGHEST_PROTOCOL)
-        for step in self.history:
-            print([str(item) for item in step])
+        with open("history.txt", "a") as file:
+            for step in self.history:
+                print([item for item in step])
+                file.write(f"{step}\n")
     
     def dealTable(self, step):
         if step == 0:
