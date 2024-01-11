@@ -38,29 +38,9 @@ class Poker:
         else:
             self.table.extend(self.deck.draw())
 
-    # gets the best hand given player and a table (the table must have at least 3 cards in it)
-    def bestHand(self, player, table):
-        return max([Hand(hand) for hand in itertools.combinations(player+table, 5)])
-
-    # returns the index in players of the player that won
-    def winner(self, players, table):
-        bHands = [self.bestHand(player, table) for player in players]
-        return bHands.index(max(bHands))
-    
-    def postFlop(self, players, table, deck):
-        unknown = set(deck.cards)
-        ptables = [table+list(adds) for adds in itertools.combinations(unknown, 5-len(table))]
-        # pHands = [[bestHand(player, ptable) for ptable in tables] for player in players]
-        winners = [self.winner(players, ptable) for ptable in ptables]
-        probs = [winners.count(i)/len(winners) for i in range(len(players))]
-        # print(f"Probs: {[f'{prob:.2f}' for prob in probs]}")
-        self.history.append([f'{prob:.2f}' for prob in probs])
-        return probs
-
-    def updateProbs(self):
-        probs = self.postFlop([player.hand for player in self.players], self.table, self.deck)
-        for i, player in enumerate(self.players):
-            player.prob = probs[i]
+    def get_sorted_hands(self):
+        with open("sorted.pkl", "rb") as file:
+            hands = pickle.load(file)
 
     def pause(self):
         self.render()

@@ -4,7 +4,6 @@ import itertools
 import time
 import pickle
 
-
 start = time.time()
 def write(path, hands):
     with open(f"{path}.txt", 'wb') as file:
